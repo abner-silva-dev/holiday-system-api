@@ -29,7 +29,7 @@ class Server {
 
   routes() {
     this.app.use("/", (req, res) => {
-      res.end("API DAI");
+      res.end("API ");
     });
     this.app.use("/department", departmentRoutes);
     this.app.use("/holiday", holidayRoutes);
