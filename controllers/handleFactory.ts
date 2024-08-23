@@ -1,100 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { Model } from "mongoose";
 
-export const getAll = <T>(Model: Model<T>) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const data = await Model.find({});
-
-      res.status(200).json({
-        status: "success",
-        results: data.length,
-        data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  };
+export const getAll = async (Model: Model) => {
+  return (req: Request, res: Response, next) => {};
 };
-
-export const getOne = <T>(Model: Model<T>) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      console.log(req.params.id);
-      const data = await Model.findById(req.params.id);
-      console.log(data);
-
-      if (!data) {
-        throw new Error("Data don't exist");
-      }
-
-      res.status(200).json({
-        status: "success",
-        data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  };
-};
-
-export const createOne = <T>(Model: Model<T>) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      console.log(req.body);
-      const data = await Model.create(req.body);
-
-      if (!data) {
-        throw new Error("Data don't exitst");
-      }
-
-      res.status(200).json({
-        status: "success",
-        data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  };
-};
-
-export const updateOne = <T>(Model: Model<T>) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const data = await Model.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      });
-
-      if (!data) {
-        throw new Error("Data don't exitst");
-      }
-
-      res.status(200).json({
-        status: "success",
-        data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  };
-};
-
-export const deleteOne = <T>(Model: Model<T>) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const data = await Model.findByIdAndDelete(req.params.id);
-
-      if (!data) {
-        throw new Error("Data don't exitst");
-      }
-
-      res.status(200).json({
-        status: "success",
-        data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  };
-};
+export const getOne = async (Model) => {};
+export const updateOne = async (Model) => {};
+export const deleteOne = async (Model) => {};
+ */
