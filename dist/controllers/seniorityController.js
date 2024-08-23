@@ -1,39 +1,14 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSeniority = exports.getSeniority = exports.getAllSeniority = void 0;
+exports.deleteSeniority = exports.updateSeniority = exports.createSeniority = exports.getSeniority = exports.getAllSeniority = void 0;
 const seniorityModel_1 = __importDefault(require("../models/seniorityModel"));
-const getAllSeniority = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const seniority = yield seniorityModel_1.default.find({});
-        res.json({
-            status: "success",
-            data: seniority,
-        });
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
-exports.getAllSeniority = getAllSeniority;
-const getSeniority = (req, res) => {
-    res.json({
-        status: "success",
-        data: [{ id: "2342342", name: "recursos humanos " }],
-    });
-};
-exports.getSeniority = getSeniority;
-const createSeniority = (req, res) => { };
-exports.createSeniority = createSeniority;
+const handleFactory_1 = require("./handleFactory");
+exports.getAllSeniority = (0, handleFactory_1.getAll)(seniorityModel_1.default);
+exports.getSeniority = (0, handleFactory_1.getOne)(seniorityModel_1.default);
+exports.createSeniority = (0, handleFactory_1.createOne)(seniorityModel_1.default);
+exports.updateSeniority = (0, handleFactory_1.updateOne)(seniorityModel_1.default);
+exports.deleteSeniority = (0, handleFactory_1.deleteOne)(seniorityModel_1.default);
 //# sourceMappingURL=seniorityController.js.map

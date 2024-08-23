@@ -29,7 +29,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const holidayController = __importStar(require("./../controllers/holidayController"));
 const router = express_1.default.Router();
-router.get("/", holidayController.getAllHoliday);
-router.get("/:id", holidayController.getHoliday);
+router
+    .route("/")
+    .get(holidayController.getAllHoliday)
+    .post(holidayController.createHoliday);
+router
+    .route("/:id")
+    .get(holidayController.getHoliday)
+    .delete(holidayController.deleteHoliday)
+    .patch(holidayController.updateHoliday);
 exports.default = router;
 //# sourceMappingURL=holidayRoutes.js.map

@@ -3,8 +3,15 @@ import * as departmentController from "./../controllers/departmentController";
 
 const router = express.Router();
 
-router.get("/", departmentController.getAllDepartment);
+router
+  .route("/")
+  .get(departmentController.getAllDepartment)
+  .post(departmentController.createDepartment);
 
-router.get("/:id", departmentController.getDepartment);
+router
+  .route("/:id")
+  .get(departmentController.getDepartment)
+  .delete(departmentController.deleteDepartment)
+  .patch(departmentController.updateDepartment);
 
 export default router;

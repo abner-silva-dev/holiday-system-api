@@ -29,7 +29,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const departmentController = __importStar(require("./../controllers/departmentController"));
 const router = express_1.default.Router();
-router.get("/", departmentController.getAllDepartment);
-router.get("/:id", departmentController.getDepartment);
+router
+    .route("/")
+    .get(departmentController.getAllDepartment)
+    .post(departmentController.createDepartment);
+router
+    .route("/:id")
+    .get(departmentController.getDepartment)
+    .delete(departmentController.deleteDepartment)
+    .patch(departmentController.updateDepartment);
 exports.default = router;
 //# sourceMappingURL=departmentRoutes.js.map

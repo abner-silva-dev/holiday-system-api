@@ -29,7 +29,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const usersController = __importStar(require("./../controllers/usersController"));
 const router = express_1.default.Router();
-router.get("/", usersController.getAllUsers);
-router.get("/:id", usersController.getUsers);
+router
+    .route("/")
+    .get(usersController.getAllUser)
+    .post(usersController.createUser);
+router
+    .route("/:id")
+    .get(usersController.getUser)
+    .delete(usersController.deleteUser)
+    .patch(usersController.updateUser);
 exports.default = router;
 //# sourceMappingURL=usersRoutes.js.map

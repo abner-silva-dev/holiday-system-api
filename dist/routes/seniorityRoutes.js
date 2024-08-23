@@ -29,7 +29,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const seniorityController = __importStar(require("./../controllers/seniorityController"));
 const router = express_1.default.Router();
-router.get("/", seniorityController.getAllSeniority);
-router.get("/:id", seniorityController.getSeniority);
+router
+    .route("/")
+    .get(seniorityController.getAllSeniority)
+    .post(seniorityController.createSeniority);
+router
+    .route("/:id")
+    .get(seniorityController.getSeniority)
+    .delete(seniorityController.deleteSeniority)
+    .patch(seniorityController.updateSeniority);
 exports.default = router;
 //# sourceMappingURL=seniorityRoutes.js.map
