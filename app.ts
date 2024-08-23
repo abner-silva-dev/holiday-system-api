@@ -3,7 +3,7 @@ import connectionDB from "./db/connection";
 
 import "dotenv/config";
 
-connectionDB();
+//connectionDB();
 
 const server = new Server();
 

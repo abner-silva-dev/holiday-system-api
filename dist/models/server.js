@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const departmentRoutes_1 = __importDefault(require("../routes/departmentRoutes"));
 const holidayRoutes_1 = __importDefault(require("../routes/holidayRoutes"));
 const enterpriseRoutes_1 = __importDefault(require("../routes/enterpriseRoutes"));
@@ -16,7 +17,16 @@ class Server {
         // INIT ROUTES
         this.routes();
     }
+    middlewares() {
+        // ABLE CORS
+        this.app.use((0, cors_1.default)());
+        // ABLE BODY REQUEST
+        this.app.use(express_1.default.json());
+    }
     routes() {
+        this.app.use("/", (req, res) => {
+            res.end("API DAI");
+        });
         this.app.use("/department", departmentRoutes_1.default);
         this.app.use("/holiday", holidayRoutes_1.default);
         this.app.use("/enterprise", enterpriseRoutes_1.default);

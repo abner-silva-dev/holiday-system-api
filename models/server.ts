@@ -1,4 +1,6 @@
 import express, { Application } from "express";
+import cors from "cors";
+
 import departmentRoutes from "../routes/departmentRoutes";
 import holidayRoutes from "../routes/holidayRoutes";
 import enterpriseRoutes from "../routes/enterpriseRoutes";
@@ -17,7 +19,18 @@ class Server {
     this.routes();
   }
 
+  middlewares() {
+    // ABLE CORS
+    this.app.use(cors());
+
+    // ABLE BODY REQUEST
+    this.app.use(express.json());
+  }
+
   routes() {
+    this.app.use("/", (req, res) => {
+      res.end("API DAI");
+    });
     this.app.use("/department", departmentRoutes);
     this.app.use("/holiday", holidayRoutes);
     this.app.use("/enterprise", enterpriseRoutes);

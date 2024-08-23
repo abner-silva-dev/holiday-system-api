@@ -8,12 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require("mongoose");
+const mongoose_1 = __importDefault(require("mongoose"));
 function connection() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield mongoose.connect("mongodb://127.0.0.1:27017/dai-enterprise");
+            yield mongoose_1.default.connect(`mongodb://127.0.0.1:27017/${process.env.DATABASE_NAME}`);
             console.log("connection successfull");
         }
         catch (error) {
