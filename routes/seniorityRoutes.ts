@@ -3,8 +3,15 @@ import * as seniorityController from "./../controllers/seniorityController";
 
 const router = express.Router();
 
-router.get("/", seniorityController.getAllSeniority);
+router
+  .route("/")
+  .get(seniorityController.getAllSeniority)
+  .post(seniorityController.createSeniority);
 
-router.get("/:id", seniorityController.getSeniority);
+router
+  .route("/:id")
+  .get(seniorityController.getSeniority)
+  .delete(seniorityController.deleteSeniority)
+  .patch(seniorityController.updateSeniority);
 
 export default router;

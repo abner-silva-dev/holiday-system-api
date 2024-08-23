@@ -1,24 +1,15 @@
-import { Request, Response } from "express";
 import HolidayModel from "../models/holidayModel";
 
-export const getAllHoliday = async (req: Request, res: Response) => {
-  try {
-    const holidays = await HolidayModel.find({});
+import {
+  createOne,
+  deleteOne,
+  getAll,
+  getOne,
+  updateOne,
+} from "./handleFactory";
 
-    res.json({
-      status: "success",
-      data: holidays,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getHoliday = (req: Request, res: Response) => {
-  res.json({
-    status: "success",
-    data: [{ id: "2342342", name: "ss " }],
-  });
-};
-
-export const createHoliday = (req: Request, res: Response) => {};
+export const getAllHoliday = getAll(HolidayModel);
+export const getHoliday = getOne(HolidayModel);
+export const createHoliday = createOne(HolidayModel);
+export const updateHoliday = updateOne(HolidayModel);
+export const deleteHoliday = deleteOne(HolidayModel);

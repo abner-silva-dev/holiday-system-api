@@ -15,6 +15,9 @@ class Server {
     this.app = express();
     this.port = process.env.PORT || "3000";
 
+    // MIDDLEWARES
+    this.middlewares();
+
     // INIT ROUTES
     this.routes();
   }
@@ -25,12 +28,13 @@ class Server {
 
     // ABLE BODY REQUEST
     this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
   }
 
   routes() {
-    this.app.use("/", (req, res) => {
-      res.end("API DAI");
-    });
+    // this.app.use("/", (req, res) => {
+    //   res.end("API asdfS");
+    // });
     this.app.use("/department", departmentRoutes);
     this.app.use("/holiday", holidayRoutes);
     this.app.use("/enterprise", enterpriseRoutes);

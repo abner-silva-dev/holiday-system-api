@@ -3,8 +3,15 @@ import * as usersController from "./../controllers/usersController";
 
 const router = express.Router();
 
-router.get("/", usersController.getAllUsers);
+router
+  .route("/")
+  .get(usersController.getAllUser)
+  .post(usersController.createUser);
 
-router.get("/:id", usersController.getUsers);
+router
+  .route("/:id")
+  .get(usersController.getUser)
+  .delete(usersController.deleteUser)
+  .patch(usersController.updateUser);
 
 export default router;

@@ -14,6 +14,8 @@ class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || "3000";
+        // MIDDLEWARES
+        this.middlewares();
         // INIT ROUTES
         this.routes();
     }
@@ -22,11 +24,12 @@ class Server {
         this.app.use((0, cors_1.default)());
         // ABLE BODY REQUEST
         this.app.use(express_1.default.json());
+        this.app.use(express_1.default.urlencoded({ extended: true }));
     }
     routes() {
-        this.app.use("/", (req, res) => {
-            res.end("API DAI");
-        });
+        // this.app.use("/", (req, res) => {
+        //   res.end("API asdfS");
+        // });
         this.app.use("/department", departmentRoutes_1.default);
         this.app.use("/holiday", holidayRoutes_1.default);
         this.app.use("/enterprise", enterpriseRoutes_1.default);

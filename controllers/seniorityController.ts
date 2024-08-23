@@ -1,24 +1,15 @@
 import SeniorityModel from "../models/seniorityModel";
-import { Request, Response } from "express";
 
-export const getAllSeniority = async (req: Request, res: Response) => {
-  try {
-    const seniority = await SeniorityModel.find({});
+import {
+  createOne,
+  deleteOne,
+  getAll,
+  getOne,
+  updateOne,
+} from "./handleFactory";
 
-    res.json({
-      status: "success",
-      data: seniority,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getSeniority = (req: Request, res: Response) => {
-  res.json({
-    status: "success",
-    data: [{ id: "2342342", name: "recursos humanos " }],
-  });
-};
-
-export const createSeniority = (req: Request, res: Response) => {};
+export const getAllSeniority = getAll(SeniorityModel);
+export const getSeniority = getOne(SeniorityModel);
+export const createSeniority = createOne(SeniorityModel);
+export const updateSeniority = updateOne(SeniorityModel);
+export const deleteSeniority = deleteOne(SeniorityModel);

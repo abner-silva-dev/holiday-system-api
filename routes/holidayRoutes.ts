@@ -3,8 +3,15 @@ import * as holidayController from "./../controllers/holidayController";
 
 const router = express.Router();
 
-router.get("/", holidayController.getAllHoliday);
+router
+  .route("/")
+  .get(holidayController.getAllHoliday)
+  .post(holidayController.createHoliday);
 
-router.get("/:id", holidayController.getHoliday);
+router
+  .route("/:id")
+  .get(holidayController.getHoliday)
+  .delete(holidayController.deleteHoliday)
+  .patch(holidayController.updateHoliday);
 
 export default router;
