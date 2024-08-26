@@ -7,7 +7,12 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const { Schema } = mongoose_1.default;
 const departmentSchema = new Schema({
     name: { type: String, requiere: [true, "A department must be have a name"] },
+    enterprise: {
+        type: Schema.Types.ObjectId,
+        ref: "Enterprise",
+        required: [true, "A department must be associated with an enterprise"],
+    },
 });
-const DepartmentModel = mongoose_1.default.model("Department", departmentSchema);
-exports.default = DepartmentModel;
+const Department = mongoose_1.default.model("Department", departmentSchema);
+exports.default = Department;
 //# sourceMappingURL=departmentModel.js.map

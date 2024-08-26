@@ -1,4 +1,4 @@
-import UsersModel from "../models/usersModel";
+import User from "../models/userModel";
 
 import {
   createOne,
@@ -8,8 +8,8 @@ import {
   updateOne,
 } from "./handleFactory";
 
-export const getAllUser = getAll(UsersModel);
-export const getUser = getOne(UsersModel);
-export const createUser = createOne(UsersModel);
-export const updateUser = updateOne(UsersModel);
-export const deleteUser = deleteOne(UsersModel);
+export const getAllUser = getAll(User);
+export const getUser = getOne(User);
+export const createUser = createOne(User);
+export const updateUser = updateOne(User);
+export const deleteUser = deleteOne(User);

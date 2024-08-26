@@ -7,7 +7,16 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const { Schema } = mongoose_1.default;
 const enterpriseSchema = new Schema({
     name: { type: String, requiere: [true, "An enterprise must be have a name"] },
+    email: {
+        type: String,
+        requiere: [true, "An enterprise must be have an email"],
+    },
+    phoneNumber: {
+        type: String,
+        requiere: [true, "An enterprise must be have a phone number"],
+    },
+    logo: { type: String },
 });
-const EnterpriseModel = mongoose_1.default.model("Enterprise", enterpriseSchema);
-exports.default = EnterpriseModel;
+const Enterprise = mongoose_1.default.model("Enterprise", enterpriseSchema);
+exports.default = Enterprise;
 //# sourceMappingURL=enterpriseModel.js.map

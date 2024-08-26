@@ -1,4 +1,4 @@
-import DepartmentModel from "../models/departmentModel";
+import Department from "../models/departmentModel";
 import {
   createOne,
   deleteOne,
@@ -7,8 +7,8 @@ import {
   updateOne,
 } from "./handleFactory";
 
-export const getAllDepartment = getAll(DepartmentModel);
-export const getDepartment = getOne(DepartmentModel);
-export const createDepartment = createOne(DepartmentModel);
-export const updateDepartment = updateOne(DepartmentModel);
-export const deleteDepartment = deleteOne(DepartmentModel);
+export const getAllDepartment = getAll(Department);
+export const getDepartment = getOne(Department);
+export const createDepartment = createOne(Department);
+export const updateDepartment = updateOne(Department);
+export const deleteDepartment = deleteOne(Department);

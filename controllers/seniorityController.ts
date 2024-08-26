@@ -1,4 +1,4 @@
-import SeniorityModel from "../models/seniorityModel";
+import Seniority from "../models/seniorityModel";
 
 import {
   createOne,
@@ -8,8 +8,8 @@ import {
   updateOne,
 } from "./handleFactory";
 
-export const getAllSeniority = getAll(SeniorityModel);
-export const getSeniority = getOne(SeniorityModel);
-export const createSeniority = createOne(SeniorityModel);
-export const updateSeniority = updateOne(SeniorityModel);
-export const deleteSeniority = deleteOne(SeniorityModel);
+export const getAllSeniority = getAll(Seniority);
+export const getSeniority = getOne(Seniority);
+export const createSeniority = createOne(Seniority);
+export const updateSeniority = updateOne(Seniority);
+export const deleteSeniority = deleteOne(Seniority);

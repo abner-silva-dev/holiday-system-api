@@ -10,8 +10,6 @@ const holidayRoutes_1 = __importDefault(require("../routes/holidayRoutes"));
 const enterpriseRoutes_1 = __importDefault(require("../routes/enterpriseRoutes"));
 const usersRoutes_1 = __importDefault(require("../routes/usersRoutes"));
 const seniorityRoutes_1 = __importDefault(require("../routes/seniorityRoutes"));
-const appError_1 = __importDefault(require("../utils/appError"));
-const errorController_1 = __importDefault(require("./../controllers/errorController"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -29,15 +27,14 @@ class Server {
         this.app.use(express_1.default.urlencoded({ extended: true }));
     }
     routes() {
-        this.app.use("/api/v1/department", departmentRoutes_1.default);
-        this.app.use("/api/v1/holiday", holidayRoutes_1.default);
-        this.app.use("/api/v1/enterprise", enterpriseRoutes_1.default);
-        this.app.use("/api/v1/seniority", seniorityRoutes_1.default);
-        this.app.use("/api/v1/users", usersRoutes_1.default);
-        this.app.all("*", (req, _, next) => {
-            next(new appError_1.default(`can't find ${req.originalUrl} on this server!`, 404));
-        });
-        this.app.use(errorController_1.default);
+        // this.app.use("/", (req, res) => {
+        //   res.end("API asdfS");
+        // });
+        this.app.use("/department", departmentRoutes_1.default);
+        this.app.use("/holiday", holidayRoutes_1.default);
+        this.app.use("/enterprise", enterpriseRoutes_1.default);
+        this.app.use("/seniority", seniorityRoutes_1.default);
+        this.app.use("/users", usersRoutes_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

@@ -1,4 +1,4 @@
-import HolidayModel from "../models/holidayModel";
+import Holiday from "../models/holidayModel";
 
 import {
   createOne,
@@ -8,8 +8,8 @@ import {
   updateOne,
 } from "./handleFactory";
 
-export const getAllHoliday = getAll(HolidayModel);
-export const getHoliday = getOne(HolidayModel);
-export const createHoliday = createOne(HolidayModel);
-export const updateHoliday = updateOne(HolidayModel);
-export const deleteHoliday = deleteOne(HolidayModel);
+export const getAllHoliday = getAll(Holiday);
+export const getHoliday = getOne(Holiday);
+export const createHoliday = createOne(Holiday);
+export const updateHoliday = updateOne(Holiday);
+export const deleteHoliday = deleteOne(Holiday);

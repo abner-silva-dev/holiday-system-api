@@ -1,4 +1,4 @@
-import EnterpriseModel from "../models/enterpriseModel";
+import Enterprise from "../models/enterpriseModel";
 
 import {
   createOne,
@@ -8,8 +8,8 @@ import {
   updateOne,
 } from "./handleFactory";
 
-export const getAllEnterprise = getAll(EnterpriseModel);
-export const getEnterprise = getOne(EnterpriseModel);
-export const createEnterprise = createOne(EnterpriseModel);
-export const updateEnterprise = updateOne(EnterpriseModel);
-export const deleteEnterprise = deleteOne(EnterpriseModel);
+export const getAllEnterprise = getAll(Enterprise);
+export const getEnterprise = getOne(Enterprise);
+export const createEnterprise = createOne(Enterprise);
+export const updateEnterprise = updateOne(Enterprise);
+export const deleteEnterprise = deleteOne(Enterprise);

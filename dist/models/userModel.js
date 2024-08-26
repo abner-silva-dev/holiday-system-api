@@ -53,6 +53,6 @@ usersSchema.pre(/^find/, function (next) {
     });
     next();
 });
-const Users = mongoose_1.default.model("Users", usersSchema);
-exports.default = Users;
-//# sourceMappingURL=usersModel.js.map
+const User = mongoose_1.default.model("User", usersSchema);
+exports.default = User;
+//# sourceMappingURL=userModel.js.map

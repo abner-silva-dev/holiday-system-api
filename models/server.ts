@@ -6,6 +6,8 @@ import holidayRoutes from "../routes/holidayRoutes";
 import enterpriseRoutes from "../routes/enterpriseRoutes";
 import usersRoutes from "../routes/usersRoutes";
 import seniorityRoutes from "../routes/seniorityRoutes";
+import AppError from "../utils/appError";
+import globalErrorHandler from "./../controllers/errorController";
 
 class Server {
   private app: Application;
@@ -32,14 +34,17 @@ class Server {
   }
 
   routes() {
-    // this.app.use("/", (req, res) => {
-    //   res.end("API asdfS");
-    // });
-    this.app.use("/department", departmentRoutes);
-    this.app.use("/holiday", holidayRoutes);
-    this.app.use("/enterprise", enterpriseRoutes);
-    this.app.use("/seniority", seniorityRoutes);
-    this.app.use("/users", usersRoutes);
+    this.app.use("/api/v1/department", departmentRoutes);
+    this.app.use("/api/v1/holiday", holidayRoutes);
+    this.app.use("/api/v1/enterprise", enterpriseRoutes);
+    this.app.use("/api/v1/seniority", seniorityRoutes);
+    this.app.use("/api/v1/users", usersRoutes);
+
+    this.app.all("*", (req, _, next) => {
+      next(new AppError(`can't find ${req.originalUrl} on this server!`, 404));
+    });
+
+    this.app.use(globalErrorHandler);
   }
 
   listen() {
