@@ -6,6 +6,11 @@ const { Schema } = mongoose;
 const usersSchema = new Schema(
   {
     name: { type: String, requiere: [true, "A user must have a name"] },
+    paternSurname: {
+      type: String,
+      requiere: [true, "A user must have a pattern surname"],
+    },
+    motherSurname: { type: String },
     employNumber: {
       type: String,
       requiere: [true, "A user must have an employ number"],
