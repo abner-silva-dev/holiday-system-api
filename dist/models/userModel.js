@@ -7,6 +7,16 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const { Schema } = mongoose_1.default;
 const usersSchema = new Schema({
     name: { type: String, requiere: [true, "A user must have a name"] },
+    role: { type: String, enum: ["user", "admin", "manager"], default: "user" },
+    dateHiring: {
+        type: Date,
+        requiere: [true, "A user must have a date hiring"],
+    },
+    paternSurname: {
+        type: String,
+        requiere: [true, "A user must have a pattern surname"],
+    },
+    motherSurname: { type: String },
     employNumber: {
         type: String,
         requiere: [true, "A user must have an employ number"],

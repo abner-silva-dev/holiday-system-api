@@ -6,6 +6,11 @@ const { Schema } = mongoose;
 const usersSchema = new Schema(
   {
     name: { type: String, requiere: [true, "A user must have a name"] },
+    role: { type: String, enum: ["user", "admin", "manager"], default: "user" },
+    dateHiring: {
+      type: Date,
+      requiere: [true, "A user must have a date hiring"],
+    },
     paternSurname: {
       type: String,
       requiere: [true, "A user must have a pattern surname"],
