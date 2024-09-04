@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./dist/app.js",
-    "compiler": "tsc --watch"
+    "compiler": "tsc --watch",
+    "dev-data": "node ./dist/dev/set-dev-data"
   },
   "keywords": [],
   "author": "",

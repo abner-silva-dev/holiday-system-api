@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
+import { Model } from "mongoose";
 
 const { Schema } = mongoose;
+
+export interface EnterpriseDocument extends Document {
+  name: string;
+  nameAbreviate: string;
+  email: string;
+  phoneNumber: string;
+  logo?: string;
+}
 
 const enterpriseSchema = new Schema({
   name: { type: String, requiere: [true, "An enterprise must be have a name"] },
@@ -19,6 +28,7 @@ const enterpriseSchema = new Schema({
   logo: { type: String },
 });
 
-const Enterprise = mongoose.model("Enterprise", enterpriseSchema);
+const Enterprise: Model<EnterpriseDocument> =
+  mongoose.model<EnterpriseDocument>("Enterprise", enterpriseSchema);
 
 export default Enterprise;

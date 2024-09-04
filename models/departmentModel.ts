@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
+import { Model } from "mongoose";
 
 const { Schema } = mongoose;
+
+export interface DepartmentDocument extends Document {
+  name: string;
+  nameAbreviate: string;
+  enterprise: mongoose.Types.ObjectId;
+}
 
 const departmentSchema = new Schema({
   name: { type: String, requiere: [true, "A department must be have a name"] },
@@ -15,6 +22,7 @@ const departmentSchema = new Schema({
   },
 });
 
-const Department = mongoose.model("Department", departmentSchema);
+const Department: Model<DepartmentDocument> =
+  mongoose.model<DepartmentDocument>("Department", departmentSchema);
 
 export default Department;

@@ -1,7 +1,21 @@
 import { NextFunction } from "express";
 import mongoose, { CallbackError, Document, Query } from "mongoose";
+import { Model } from "mongoose";
 
 const { Schema } = mongoose;
+
+export interface UserDocument extends Document {
+  name: string;
+  role: "user" | "admin" | "manager";
+  dateHiring: Date;
+  paternSurname: string;
+  motherSurname?: string;
+  employNumber: string;
+  email: string;
+  phoneNumber: string;
+  enterprise: mongoose.Types.ObjectId;
+  department: mongoose.Types.ObjectId;
+}
 
 const usersSchema = new Schema(
   {
@@ -68,6 +82,9 @@ usersSchema.pre<Query<any, any>>(/^find/, function (next) {
   next();
 });
 
-const User = mongoose.model("User", usersSchema);
+const User: Model<UserDocument> = mongoose.model<UserDocument>(
+  "User",
+  usersSchema
+);
 
 export default User;
