@@ -4,6 +4,10 @@ const { Schema } = mongoose;
 
 const departmentSchema = new Schema({
   name: { type: String, requiere: [true, "A department must be have a name"] },
+  nameAbreviate: {
+    type: String,
+    requiere: [true, "A department must have an abreviated name"],
+  },
   enterprise: {
     type: Schema.Types.ObjectId,
     ref: "Enterprise",

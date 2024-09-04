@@ -7,6 +7,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const { Schema } = mongoose_1.default;
 const departmentSchema = new Schema({
     name: { type: String, requiere: [true, "A department must be have a name"] },
+    nameAbreviate: {
+        type: String,
+        requiere: [true, "A department must have an abreviated name"],
+    },
     enterprise: {
         type: Schema.Types.ObjectId,
         ref: "Enterprise",

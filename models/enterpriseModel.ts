@@ -4,6 +4,10 @@ const { Schema } = mongoose;
 
 const enterpriseSchema = new Schema({
   name: { type: String, requiere: [true, "An enterprise must be have a name"] },
+  nameAbreviate: {
+    type: String,
+    requiere: [true, "An enterprise must have an abreviated name"],
+  },
   email: {
     type: String,
     requiere: [true, "An enterprise must be have an email"],
