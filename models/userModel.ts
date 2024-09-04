@@ -1,3 +1,4 @@
+import { addMonths, differenceInDays, differenceInMonths } from "date-fns";
 import { NextFunction } from "express";
 import mongoose, { CallbackError, Document, Query } from "mongoose";
 import { Model } from "mongoose";
@@ -66,6 +67,30 @@ usersSchema.virtual("holiday", {
   ref: "Holiday",
   foreignField: "holiday",
   localField: "_id",
+});
+
+usersSchema.virtual("seniority").get(function () {
+  if (!this.dateHiring) return;
+
+  const startDate = this.dateHiring;
+  const endDate = new Date();
+
+  const totalMonths = differenceInMonths(endDate, startDate);
+  console.log(totalMonths);
+
+  // Calculate years and remaining months
+  const years = Math.floor(totalMonths / 12);
+  const remainingMonths = totalMonths % 12;
+
+  // Calculate remaining days
+  const lastFullMonth = addMonths(startDate, years * 12 + remainingMonths);
+  const days = differenceInDays(endDate, lastFullMonth);
+
+  return {
+    years,
+    moths: remainingMonths,
+    days,
+  };
 });
 
 // POPULATE
