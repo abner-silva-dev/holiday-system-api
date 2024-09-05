@@ -17,6 +17,14 @@ const departmentSchema = new Schema({
         required: [true, "A department must be associated with an enterprise"],
     },
 });
+// POPULATE
+departmentSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: "enterprise",
+        select: "",
+    });
+    next();
+});
 const Department = mongoose_1.default.model("Department", departmentSchema);
 exports.default = Department;
 //# sourceMappingURL=departmentModel.js.map

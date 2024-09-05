@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Query } from "mongoose";
 import { Model } from "mongoose";
 
 const { Schema } = mongoose;
@@ -20,6 +20,15 @@ const departmentSchema = new Schema({
     ref: "Enterprise",
     required: [true, "A department must be associated with an enterprise"],
   },
+});
+
+// POPULATE
+departmentSchema.pre<Query<any, any>>(/^find/, function (next) {
+  this.populate({
+    path: "enterprise",
+    select: "",
+  });
+  next();
 });
 
 const Department: Model<DepartmentDocument> =
