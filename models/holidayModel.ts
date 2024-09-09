@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 
 const holidaySchema = new Schema(
   {
-    name: { type: String, requiere: [true, "A holiday must have a name"] },
     startingDate: {
       type: Date,
       requiere: [true, "A holiday must have a starting date"],
@@ -24,9 +23,10 @@ const holidaySchema = new Schema(
       type: String,
       requiere: [true, "A holiday must have an admin name"],
     },
-    firmEmployer: {
-      type: String,
-      requiere: [true, "A holiday must have an employer firm"],
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "A holiday must be associated with a user"],
     },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
