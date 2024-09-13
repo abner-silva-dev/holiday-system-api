@@ -177,5 +177,6 @@ export const dataUsers = [
     email: "claudia.romero@example.com",
     phoneNumber: "5562323388",
     enterprise: "66d8b097a37e7c7823c03a11",
+    department: "66d8b2ee3a12eea2060d22ff",
   },
 ];
