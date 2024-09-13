@@ -1,5 +1,6 @@
 export const dataUsers = [
   {
+    _id: "64fbf01e9b9f146bdc6a1a01",
     employNumber: 1,
     name: "Ana Pérez",
     paternSurname: "Pérez",
@@ -11,6 +12,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22fc",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a02",
     employNumber: 2,
     name: "Carlos López",
     paternSurname: "López",
@@ -22,6 +24,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22ff",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a03",
     employNumber: 3,
     name: "Laura González",
     paternSurname: "González",
@@ -33,6 +36,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22fc",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a04",
     employNumber: 4,
     name: "Miguel Fernández",
     paternSurname: "Fernández",
@@ -44,6 +48,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22ff",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a05",
     employNumber: 5,
     name: "Sofía Martínez",
     paternSurname: "Martínez",
@@ -55,6 +60,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22fc",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a06",
     employNumber: 6,
     name: "Pedro Gómez",
     paternSurname: "Gómez",
@@ -66,6 +72,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22ff",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a07",
     employNumber: 7,
     name: "María Rodríguez",
     paternSurname: "Rodríguez",
@@ -77,6 +84,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22fc",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a08",
     employNumber: 8,
     name: "Juan Pérez",
     paternSurname: "Pérez",
@@ -88,6 +96,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22ff",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a09",
     employNumber: 9,
     name: "Valeria Gómez",
     paternSurname: "Gómez",
@@ -99,6 +108,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22fc",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a0a",
     employNumber: 10,
     name: "Roberto Moreno",
     paternSurname: "Moreno",
@@ -110,6 +120,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22ff",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a0b",
     employNumber: 11,
     name: "Gabriela Sánchez",
     paternSurname: "Sánchez",
@@ -121,6 +132,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22fc",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a0c",
     employNumber: 12,
     name: "Antonio Díaz",
     paternSurname: "Díaz",
@@ -132,6 +144,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22ff",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a0d",
     employNumber: 13,
     name: "Isabel Cruz",
     paternSurname: "Cruz",
@@ -143,6 +156,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22fc",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a0e",
     employNumber: 14,
     name: "Fernando Martínez",
     paternSurname: "Martínez",
@@ -154,6 +168,7 @@ export const dataUsers = [
     department: "66d8b2ee3a12eea2060d22ff",
   },
   {
+    _id: "64fbf01e9b9f146bdc6a1a0f",
     employNumber: 15,
     name: "Claudia Romero",
     paternSurname: "Romero",
@@ -162,6 +177,5 @@ export const dataUsers = [
     email: "claudia.romero@example.com",
     phoneNumber: "5562323388",
     enterprise: "66d8b097a37e7c7823c03a11",
-    department: "66d8b2ee3a12eea2060d22fc",
   },
 ];

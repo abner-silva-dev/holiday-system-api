@@ -6,38 +6,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const { Schema } = mongoose_1.default;
 const holidaySchema = new Schema({
-    name: { type: String, requiere: [true, "A holiday must have a name"] },
-    startingDate: {
-        type: Date,
-        requiere: [true, "A holiday must have a starting date"],
+    days: {
+        type: [Date],
+        requiere: [true, "A holiday must have a day for create holidays"],
     },
-    endDate: {
-        type: Date,
-        requiere: [true, "A holiday must have an end date"],
-    },
-    authorizationAnticipate: { type: Boolean },
+    authorizationAdmin: { type: Boolean },
     authorizationMannager: { type: Boolean },
     observation: { type: String },
-    mannagerName: {
+    mannager: {
         type: String,
         requiere: [true, "A holiday must have a mannager name"],
     },
-    adminName: {
+    admin: {
         type: String,
         requiere: [true, "A holiday must have an admin name"],
     },
-    firmEmployer: {
-        type: String,
-        requiere: [true, "A holiday must have an employer firm"],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: [true, "A holiday must be associated with a user"],
     },
-}, { toJSON: { virtuals: true }, toObject: { virtuals: true } });
-// reviewSchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: "user",
-//     select: "-email -role",
-//   });
-//   next();
-// });
+}, { toJSON: { virtuals: true }, toObject: { virtuals: true }, timestamps: true });
+holidaySchema.pre(/^find/, function (next) {
+    this.populate({
+        path: "user",
+        select: "",
+    });
+    this.populate({
+        path: "admin",
+        select: "",
+    });
+    this.populate({
+        path: "mannager",
+        select: "",
+    });
+    next();
+});
 // holidaySchema.virtual("reviews", {
 //   ref: "Review",
 //   foreignField: "tour",

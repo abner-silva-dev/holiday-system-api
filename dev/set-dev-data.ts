@@ -21,7 +21,7 @@ type DepartmentModel = Model<DepartmentDocument>;
 type ModelType = UserModel | EnterpriseModel | DepartmentModel;
 
 // DATAS
-const collectionsNames: string[] = ["department", "enterprise", "user"];
+const collectionsNames: string[] = ["department", "enterprise", "user", "all"];
 const collectionsModel: ModelType[] = [Department, Enterprise, User];
 
 const JSONFiles: (
@@ -48,10 +48,10 @@ const importData = async (
   try {
     await (Model as any).create(JSONFile, { validateBeforeSave: false });
     console.log("Data successfully loaded!");
-    process.exit();
+    // process.exit();
   } catch (err) {
     console.error(err);
-    process.exit(1);
+    // process.exit(1);
   }
 };
 
@@ -60,10 +60,10 @@ const removeAllData = async (Model: ModelType): Promise<void> => {
   try {
     await (Model as any).deleteMany();
     console.log("Data successfully removed!");
-    process.exit();
+    // process.exit();
   } catch (err) {
     console.error(err);
-    process.exit(1);
+    // process.exit(1);
   }
 };
 
@@ -72,6 +72,21 @@ const removeAllData = async (Model: ModelType): Promise<void> => {
   if (process.argv[2] !== "import" && process.argv[2] !== "remove") {
     console.error("Invalid argument");
     process.exit(1);
+  }
+
+  if (process.argv[3] === "all") {
+    if (process.argv[2] === "import") {
+      await importData(JSONFiles[1], collectionsModel[1]);
+      await importData(JSONFiles[0], collectionsModel[0]);
+      await importData(JSONFiles[2], collectionsModel[2]);
+    }
+
+    if (process.argv[2] === "remove") {
+      await removeAllData(collectionsModel[1]);
+      await removeAllData(collectionsModel[0]);
+      await removeAllData(collectionsModel[2]);
+    }
+    return process.exit();
   }
 
   let JSONFile:
@@ -100,11 +115,14 @@ const removeAllData = async (Model: ModelType): Promise<void> => {
   switch (process.argv[2]) {
     case "import":
       await importData(JSONFile, collection);
+
       break;
     case "remove":
       await removeAllData(collection);
       break;
   }
+
+  process.exit();
 })();
 
 // call to npm: node 'path' {import | remove} {department | user | enterprise}
