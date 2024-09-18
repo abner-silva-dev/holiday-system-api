@@ -10,6 +10,7 @@ export const dataUsers = [
     phoneNumber: "5562323332",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
+    role: "manager",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a02",
@@ -22,6 +23,7 @@ export const dataUsers = [
     phoneNumber: "5562323344",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "manager",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a03",
@@ -34,6 +36,7 @@ export const dataUsers = [
     phoneNumber: "5562323355",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a04",
@@ -46,6 +49,7 @@ export const dataUsers = [
     phoneNumber: "5562323366",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a05",
@@ -58,6 +62,7 @@ export const dataUsers = [
     phoneNumber: "5562323377",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a06",
@@ -70,6 +75,7 @@ export const dataUsers = [
     phoneNumber: "5562323388",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a07",
@@ -82,6 +88,7 @@ export const dataUsers = [
     phoneNumber: "5562323399",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a08",
@@ -94,6 +101,7 @@ export const dataUsers = [
     phoneNumber: "5562323310",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a09",
@@ -106,6 +114,7 @@ export const dataUsers = [
     phoneNumber: "5562323321",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0a",
@@ -118,6 +127,7 @@ export const dataUsers = [
     phoneNumber: "5562323333",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "admin",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0b",
@@ -130,6 +140,7 @@ export const dataUsers = [
     phoneNumber: "5562323344",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0c",
@@ -142,6 +153,7 @@ export const dataUsers = [
     phoneNumber: "5562323355",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0d",
@@ -154,6 +166,7 @@ export const dataUsers = [
     phoneNumber: "5562323366",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0e",
@@ -166,6 +179,7 @@ export const dataUsers = [
     phoneNumber: "5562323377",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "user",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0f",
@@ -178,5 +192,6 @@ export const dataUsers = [
     phoneNumber: "5562323388",
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
+    role: "user",
   },
 ];

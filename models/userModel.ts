@@ -2,6 +2,7 @@ import { addMonths, differenceInDays, differenceInMonths } from "date-fns";
 import { NextFunction } from "express";
 import mongoose, { CallbackError, Document, Query } from "mongoose";
 import { Model } from "mongoose";
+import { HolidayDocument } from "./holidayModel";
 
 const { Schema } = mongoose;
 
@@ -16,29 +17,31 @@ export interface UserDocument extends Document {
   phoneNumber: string;
   enterprise: mongoose.Types.ObjectId;
   department: mongoose.Types.ObjectId;
+  holidays?: HolidayDocument[];
 }
 
 const usersSchema = new Schema(
   {
-    name: { type: String, requiere: [true, "A user must have a name"] },
-    role: { type: String, enum: ["user", "admin", "manager"], default: "user" },
-    dateHiring: {
-      type: Date,
-      requiere: [true, "A user must have a date hiring"],
-    },
+    name: { type: String, requiered: [true, "A user must have a name"] },
     paternSurname: {
       type: String,
-      requiere: [true, "A user must have a pattern surname"],
+      requiered: [true, "A user must have a pattern surname"],
     },
     motherSurname: { type: String },
     employNumber: {
       type: String,
-      requiere: [true, "A user must have an employ number"],
+      requiered: [true, "A user must have an employ number"],
     },
-    email: { type: String, requiere: [true, "A user must have an email"] },
+    photo: { type: String, default: "default.jpg" },
+    role: { type: String, enum: ["user", "admin", "manager"], default: "user" },
+    dateHiring: {
+      type: Date,
+      requiered: [true, "A user must have a date hiring"],
+    },
+    email: { type: String, requiered: [true, "A user must have an email"] },
     phoneNumber: {
       type: String,
-      requiere: [true, "A user must have a phone number"],
+      requiered: [true, "A user must have a phone number"],
     },
     enterprise: {
       type: Schema.Types.ObjectId,
@@ -50,22 +53,13 @@ const usersSchema = new Schema(
       ref: "Department",
       required: [true, "A user must be associated with a department"],
     },
-    // seniority: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Seniority",
-    //   required: [true, "A user must be associated with a seniority"],
-    // },
   },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-// VIRTUAL POPULATE
-usersSchema.virtual("holiday", {
+usersSchema.virtual("holidays", {
   ref: "Holiday",
-  foreignField: "holiday",
+  foreignField: "user",
   localField: "_id",
 });
 
@@ -76,7 +70,6 @@ usersSchema.virtual("seniority").get(function () {
   const endDate = new Date();
 
   const totalMonths = differenceInMonths(endDate, startDate);
-  console.log(totalMonths);
 
   // Calculate years and remaining months
   const years = Math.floor(totalMonths / 12);
@@ -95,6 +88,8 @@ usersSchema.virtual("seniority").get(function () {
 
 // POPULATE
 usersSchema.pre<Query<any, any>>(/^find/, function (next) {
+  this.find().select("-__v");
+
   this.populate({
     path: "department",
     select: "-email -role",
@@ -104,6 +99,7 @@ usersSchema.pre<Query<any, any>>(/^find/, function (next) {
     path: "enterprise",
     select: "-email -role",
   });
+
   next();
 });
 

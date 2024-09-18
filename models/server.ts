@@ -28,6 +28,9 @@ class Server {
     // ABLE CORS
     this.app.use(cors());
 
+    // SERVING STATIC FILES
+    this.app.use(express.static("public"));
+
     // ABLE BODY REQUEST
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));

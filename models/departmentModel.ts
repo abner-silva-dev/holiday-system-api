@@ -26,8 +26,7 @@ const departmentSchema = new Schema({
 departmentSchema.pre<Query<any, any>>(/^find/, function (next) {
   this.populate({
     path: "enterprise",
-    select: "",
-  });
+  }).select("-__v");
   next();
 });
 
