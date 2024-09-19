@@ -50,7 +50,7 @@ export const getOne = <T>(Model: Model<T>, popOptions?: { path: string }) => {
 
       res.status(200).json({
         status: "success",
-        doc,
+        data: doc,
       });
     } catch (err) {
       next(err);
