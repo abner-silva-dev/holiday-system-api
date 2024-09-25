@@ -1,7 +1,10 @@
 import express from "express";
 import * as departmentController from "./../controllers/departmentController";
+import * as authController from "./../controllers/authController";
 
 const router = express.Router();
+
+router.use(authController.protect);
 
 router
   .route("/")

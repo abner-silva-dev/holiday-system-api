@@ -11,6 +11,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
     role: "manager",
+    password: "Ana1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a02",
@@ -24,6 +25,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "manager",
+    password: "Carlos1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a03",
@@ -37,6 +39,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
     role: "user",
+    password: "Laura1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a04",
@@ -50,6 +53,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "user",
+    password: "Miguel1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a05",
@@ -63,6 +67,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
     role: "user",
+    password: "Sofia1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a06",
@@ -76,6 +81,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "user",
+    password: "Pedro1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a07",
@@ -89,6 +95,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
     role: "user",
+    password: "Maria1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a08",
@@ -102,6 +109,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "user",
+    password: "Juan1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a09",
@@ -115,6 +123,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
     role: "user",
+    password: "Valeria1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0a",
@@ -128,6 +137,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "admin",
+    password: "Roberto1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0b",
@@ -141,6 +151,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
     role: "user",
+    password: "Gabriela1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0c",
@@ -154,6 +165,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "user",
+    password: "Antonio1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0d",
@@ -167,6 +179,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22fc",
     role: "user",
+    password: "Isabel1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0e",
@@ -180,6 +193,7 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "user",
+    password: "Fernando1234",
   },
   {
     _id: "64fbf01e9b9f146bdc6a1a0f",
@@ -193,5 +207,6 @@ export const dataUsers = [
     enterprise: "66d8b097a37e7c7823c03a11",
     department: "66d8b2ee3a12eea2060d22ff",
     role: "user",
+    password: "Claudia1234",
   },
 ];

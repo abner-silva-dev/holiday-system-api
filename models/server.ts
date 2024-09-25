@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import departmentRoutes from "../routes/departmentRoutes";
 import holidayRoutes from "../routes/holidayRoutes";
@@ -34,6 +35,9 @@ class Server {
     // ABLE BODY REQUEST
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+
+    // COOKIES
+    this.app.use(cookieParser());
   }
 
   routes() {
