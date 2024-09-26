@@ -7,3 +7,9 @@ declare namespace NodeJS {
     JWT_COOKIE_EXPIRES_IN: number;
   }
 }
+
+declare namespace Express {
+  export interface Request {
+    user?: any; // O define el tipo exacto del usuario si lo tienes
+  }
+}

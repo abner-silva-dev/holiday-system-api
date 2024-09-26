@@ -22,7 +22,6 @@ const createSendToken = (
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-
     httpOnly: true,
     secure: req.secure || req.headers["x-forwaded-proto"] === "https",
   });
@@ -74,7 +73,7 @@ export const login = async (
       );
 
     // 3) If everything ok, send token to client
-    createSendToken(user, 200, req, res);
+    createSendToken(user, 200, req, res, true);
   } catch (error) {
     next(error);
   }
@@ -120,16 +119,21 @@ export const protect = async (
     }
 
     // 2) Verification token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+      id: string;
+    };
+
+    console.log(decoded);
 
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
 
-    if (!currentUser) {
-      return next(
-        new AppError("El usuario que pertenece a este token ya no existe", 401)
-      );
-    }
+    console.log(currentUser);
+    // if (!currentUser) {
+    //   return next(
+    //     new AppError("El usuario que pertenece a este token ya no existe", 401)
+    //   );
+    // }
 
     // 4) Check if user changed password after the token was issued
     // if (currentUser.changedPasswordAfter(decoded.iat))
@@ -141,11 +145,11 @@ export const protect = async (
     //   );
 
     // GRANT ACCESS TO PROTECTED ROUTE
-    req.user = currentUser; // Asegúrate de que `user` esté tipado en tu Request
+    req.user = currentUser;
     res.locals.user = currentUser;
     next();
   } catch (error) {
-    next(error); // Manejo de errores
+    next(error);
   }
 };
 

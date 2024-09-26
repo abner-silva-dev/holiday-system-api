@@ -20,11 +20,11 @@ const errorController = (
   });
 
   // B) RENDERED WEBSITE
-  console.error("ERROR 🔥", err);
+  console.error("ERROR 🔥", err.message);
 
-  res
-    .status(appError.statusCode)
-    .render("error", { title: "something went wrong!", msg: err.message });
+  // res
+  //   .status(appError.statusCode)
+  //   .render("error", { title: "something went wrong!", msg: err.message });
 };
 
 export default errorController;

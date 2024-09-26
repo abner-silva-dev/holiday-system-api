@@ -4,6 +4,7 @@ import * as authController from "./../controllers/authController";
 
 const router = express.Router();
 
+router.get("/logout", authController.logout);
 router.post("/login", authController.login);
 
 router.use(authController.protect);

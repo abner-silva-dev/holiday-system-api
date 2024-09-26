@@ -12,11 +12,11 @@ import globalErrorHandler from "./../controllers/errorController";
 
 class Server {
   private app: Application;
-  private port: string;
+  private port: number;
 
   constructor() {
     this.app = express();
-    this.port = process.env.PORT || "3000";
+    this.port = process.env.PORT || 3000;
 
     // MIDDLEWARES
     this.middlewares();
@@ -27,7 +27,12 @@ class Server {
 
   middlewares() {
     // ABLE CORS
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+      })
+    );
 
     // SERVING STATIC FILES
     this.app.use(express.static("public"));
@@ -38,6 +43,12 @@ class Server {
 
     // COOKIES
     this.app.use(cookieParser());
+    // this.app.use(compression());
+
+    this.app.use((req, _, next) => {
+      console.log(req.cookies);
+      next();
+    });
   }
 
   routes() {
