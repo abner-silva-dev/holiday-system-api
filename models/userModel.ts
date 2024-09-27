@@ -15,6 +15,7 @@ export interface UserDocument extends Document {
   motherSurname?: string;
   employNumber: string;
   email: string;
+  photo?: string;
   phoneNumber: string;
   enterprise: mongoose.Types.ObjectId;
   department: mongoose.Types.ObjectId;
