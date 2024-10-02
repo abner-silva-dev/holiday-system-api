@@ -44,11 +44,6 @@ class Server {
     // COOKIES
     this.app.use(cookieParser());
     // this.app.use(compression());
-
-    this.app.use((req, _, next) => {
-      console.log(req.cookies);
-      next();
-    });
   }
 
   routes() {

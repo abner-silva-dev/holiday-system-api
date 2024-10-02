@@ -53,8 +53,6 @@ export const login = async (
   try {
     const { employNumber, password } = req.body;
 
-    console.log(employNumber, password);
-
     // 1) EmployNumber and password exist
     if (!employNumber || !password)
       return next(
@@ -106,7 +104,6 @@ export const protect = async (
 
     if (req.cookies.jwt) {
       token = req.cookies.jwt;
-      console.log(token);
     }
 
     if (!token) {
@@ -123,12 +120,9 @@ export const protect = async (
       id: string;
     };
 
-    console.log(decoded);
-
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
 
-    console.log(currentUser);
     // if (!currentUser) {
     //   return next(
     //     new AppError("El usuario que pertenece a este token ya no existe", 401)
