@@ -4,6 +4,7 @@ import { NextFunction } from "express";
 import { addMonths, differenceInDays, differenceInMonths } from "date-fns";
 import { Model } from "mongoose";
 import { HolidayDocument } from "./holidayModel";
+import { start } from "repl";
 
 const { Schema } = mongoose;
 
@@ -17,6 +18,7 @@ export interface UserDocument extends Document {
   email: string;
   photo?: string;
   phoneNumber: string;
+  credit: number;
   enterprise: mongoose.Types.ObjectId;
   department: mongoose.Types.ObjectId;
   holidays?: HolidayDocument[];
@@ -50,6 +52,9 @@ const userSchema = new Schema(
     phoneNumber: {
       type: String,
       requiered: [true, "Por favor proporcione un numero de telefono"],
+    },
+    credit: {
+      type: Number,
     },
     enterprise: {
       type: Schema.Types.ObjectId,
@@ -92,10 +97,8 @@ userSchema.virtual("holidays", {
   localField: "_id",
 });
 
-userSchema.virtual("seniority").get(function () {
-  if (!this.dateHiring) return;
-
-  const startDate = this.dateHiring;
+const getSeniority = (date: Date) => {
+  const startDate = date;
   const endDate = new Date();
 
   const totalMonths = differenceInMonths(endDate, startDate);
@@ -113,12 +116,43 @@ userSchema.virtual("seniority").get(function () {
     moths: remainingMonths,
     days,
   };
+};
+
+userSchema.virtual("seniority").get(function () {
+  if (!this.dateHiring) return;
+  const { years, moths, days } = getSeniority(this.dateHiring);
+
+  return {
+    years,
+    moths,
+    days,
+  };
+});
+
+userSchema.virtual("daysGrantedBySeniority").get(function () {
+  if (!this.dateHiring) return;
+  const { years } = getSeniority(this.dateHiring);
+
+  let daysGrantedBySeniority = 0;
+
+  if (years < 1) daysGrantedBySeniority = 0;
+  if (years >= 1 && years < 2) daysGrantedBySeniority = 12;
+  if (years >= 2 && years < 3) daysGrantedBySeniority = 14;
+  if (years >= 3 && years < 4) daysGrantedBySeniority = 16;
+  if (years >= 4 && years < 5) daysGrantedBySeniority = 18;
+  if (years >= 5 && years < 6) daysGrantedBySeniority = 20;
+  if (years >= 6 && years < 11) daysGrantedBySeniority = 22;
+  if (years >= 11 && years < 16) daysGrantedBySeniority = 24;
+  if (years >= 16 && years < 21) daysGrantedBySeniority = 26;
+  if (years >= 21 && years < 26) daysGrantedBySeniority = 28;
+  if (years >= 26 && years < 31) daysGrantedBySeniority = 30;
+  if (years >= 31) daysGrantedBySeniority = 32;
+
+  return daysGrantedBySeniority;
 });
 
 // POPULATE
 userSchema.pre<Query<any, any>>(/^find/, function (next) {
-  // this.select("-__v");
-
   this.populate({
     path: "department",
     select: "-email -role",
@@ -132,28 +166,43 @@ userSchema.pre<Query<any, any>>(/^find/, function (next) {
   next();
 });
 
+start;
+
+// VALIDATION SET SENIORITY
+userSchema.pre("save", async function (next) {
+  console.log("Entro");
+
+  if (!this.dateHiring) return next();
+
+  if (!this.isNew) return next();
+
+  const { years } = getSeniority(this.dateHiring);
+
+  if (years < 1) this.credit = 0;
+  if (years >= 1 && years < 2) this.credit = 12;
+  if (years >= 2 && years < 3) this.credit = 14;
+  if (years >= 3 && years < 4) this.credit = 16;
+  if (years >= 4 && years < 5) this.credit = 18;
+  if (years >= 5 && years < 6) this.credit = 20;
+  if (years >= 6 && years < 11) this.credit = 22;
+  if (years >= 11 && years < 16) this.credit = 24;
+  if (years >= 16 && years < 21) this.credit = 26;
+  if (years >= 21 && years < 26) this.credit = 28;
+  if (years >= 26 && years < 31) this.credit = 30;
+  if (years >= 31) this.credit = 32;
+
+  next();
+});
+
 // PASSWORD
 userSchema.pre("save", async function (next) {
   //Only run this function if password was modified
   if (!this.isModified("password")) return next();
-
-  // Hash the password with cost of 12
-  // this.password = await bcrypt.hash(this.password, 12);
-
-  // Delete the passwordConfirm field
   this.passwordConfirm = undefined;
   next();
 });
 
-// USERS INAVILITY
-// userSchema.pre(/^find/, function(next) {
-//   // THIS point to current query
-//   this.find({ active: { $ne: false } }).select('-__v');
-//   next();
-// });
-
 /*METHODS (point to current DOC)*/
-
 userSchema.methods.correctPassword = (
   candidatePassword: string,
   userPassword: string
@@ -167,3 +216,10 @@ const User: Model<UserDocument> = mongoose.model<UserDocument>(
 );
 
 export default User;
+
+// USERS INAVILITY
+// userSchema.pre(/^find/, function(next) {
+//   // THIS point to current query
+//   this.find({ active: { $ne: false } }).select('-__v');
+//   next();
+// });

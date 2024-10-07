@@ -78,6 +78,22 @@ holidaySchema.pre<Query<any, any>>(/^find/, function (next) {
   next();
 });
 
+// holidaySchema.pre("findOneAndUpdate", async function (next) {
+//   const update = this.getUpdate();
+
+//   if (!update || typeof update !== "object" || Array.isArray(update))
+//     return next();
+
+//   if (
+//     update.authorizationAdmin === "approved" &&
+//     update.authorizationManager === "approved"
+//   ) {
+//     // get
+//   }
+
+//   next();
+// });
+
 const Holiday: Model<HolidayDocument> = mongoose.model<HolidayDocument>(
   "Holiday",
   holidaySchema

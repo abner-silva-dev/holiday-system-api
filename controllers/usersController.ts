@@ -98,3 +98,22 @@ export const getUser = getOne(User, { path: "holidays" });
 export const createUser = createOne(User);
 export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
+
+// export const createUser = <T>(Model: Model<T>) => {
+//   return async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const data = await Model.create(req.body);
+
+//       if (!data) {
+//         throw new Error("Data don't exitst");
+//       }
+
+//       res.status(200).json({
+//         status: "success",
+//         data,
+//       });
+//     } catch (err) {
+//       next(err);
+//     }
+//   };
+// };
