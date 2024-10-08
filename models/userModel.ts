@@ -1,5 +1,4 @@
-import mongoose, { CallbackError, Document, Query } from "mongoose";
-import { NextFunction } from "express";
+import mongoose, { Document, Query } from "mongoose";
 
 import { addMonths, differenceInDays, differenceInMonths } from "date-fns";
 import { Model } from "mongoose";
@@ -168,10 +167,12 @@ userSchema.pre<Query<any, any>>(/^find/, function (next) {
 
 start;
 
+userSchema.pre("find", async function name(next) {
+  // this.find.;
+});
+
 // VALIDATION SET SENIORITY
 userSchema.pre("save", async function (next) {
-  console.log("Entro");
-
   if (!this.dateHiring) return next();
 
   if (!this.isNew) return next();

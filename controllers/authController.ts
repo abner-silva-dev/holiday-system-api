@@ -147,7 +147,7 @@ export const protect = async (
   }
 };
 
-export const restrictTo = (...roles: ["user", "admin", "manager"]) => {
+export const restrictTo = (...roles: ("user" | "admin" | "manager")[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role))
       return next(

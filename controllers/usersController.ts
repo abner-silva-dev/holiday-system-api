@@ -93,7 +93,31 @@ export const updateMe = async (
   }
 };
 
-export const getAllUser = getAll(User, { path: "holidays" });
+export const getAllUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    let query = User.find({});
+
+    if (req.user.role === "manager")
+      query = User.find({ department: req.user.department });
+
+    query = query.populate({ path: "holidays" });
+    const docs = await query;
+
+    res.status(200).json({
+      status: "success",
+      results: docs.length,
+      data: docs,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// export const getAllUser = getAll(User, { path: "holidays" });
 export const getUser = getOne(User, { path: "holidays" });
 export const createUser = createOne(User);
 export const updateUser = updateOne(User);

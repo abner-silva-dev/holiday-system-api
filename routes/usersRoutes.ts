@@ -20,7 +20,10 @@ router.patch(
 
 router
   .route("/")
-  .get(usersController.getAllUser)
+  .get(
+    authController.restrictTo("admin", "manager"),
+    usersController.getAllUser
+  )
   .post(usersController.createUser);
 
 router
