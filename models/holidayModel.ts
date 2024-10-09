@@ -43,17 +43,23 @@ const holidaySchema = new Schema(
     manager: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "A holiday must have a manager name"],
+      // required: [
+      //   true,
+      //   "Las vacaciones deben estar asociadas a un jefe de departamento",
+      // ],
     },
     admin: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "A holiday must have an admin name"],
+      // required: [
+      //   true,
+      //   "Las vacaciones deben estar asociadas a un administrador",
+      // ],
     },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "A holiday must be associated with a user"],
+      required: [true, "Las vacaciones deben estar asociadas a un usuario"],
     },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
