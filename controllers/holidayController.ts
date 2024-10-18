@@ -36,11 +36,11 @@ export const updateHoliday = async (
     ) {
       const user = await User.findById(data.user.id);
 
-      if (user) {
-        user.credit = user.credit - data.days.length;
-        console.log(user.credit);
-        await user.save({ validateBeforeSave: true });
-      }
+      // if (user) {
+      //   user.credit = user.credit - data.days.length;
+      //   console.log(user.credit);
+      //   await user.save({ validateBeforeSave: true });
+      // }
     }
 
     res.status(200).json({

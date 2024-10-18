@@ -1,19 +1,31 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 
 const { Schema } = mongoose;
 
+export interface SeniorityDocument extends Document {
+  minYears: number;
+  maxYears: number;
+  vacationDays: number;
+}
+
 const senioritySchema = new Schema({
-  name: { type: String, requiere: [true, "A seniority must have a name"] },
-  yearsOld: {
+  minYears: {
     type: Number,
-    requiere: [true, "A seniority must have years old"],
+    required: true,
   },
-  daysAvailables: {
+  maxYears: {
     type: Number,
-    requiere: [true, "A seniority must have days availables"],
+    required: true,
+  },
+  vacationDays: {
+    type: Number,
+    required: true,
   },
 });
 
-const Seniority = mongoose.model("Seniority", senioritySchema);
+const Seniority: Model<SeniorityDocument> = mongoose.model<SeniorityDocument>(
+  "Seniority",
+  senioritySchema
+);
 
 export default Seniority;

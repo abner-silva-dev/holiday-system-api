@@ -24,12 +24,21 @@ router
     authController.restrictTo("admin", "manager"),
     usersController.getAllUser
   )
-  .post(usersController.createUser);
+  .post(
+    usersController.uploadUserPhoto,
+    usersController.createUser,
+    usersController.resizeUserPhoto,
+    usersController.sendResponse
+  );
 
 router
   .route("/:id")
   .get(usersController.getUser)
   .delete(usersController.deleteUser)
-  .patch(usersController.updateUser);
+  .patch(
+    usersController.uploadUserPhoto,
+    usersController.resizeUserPhoto,
+    usersController.updateUser
+  );
 
 export default router;

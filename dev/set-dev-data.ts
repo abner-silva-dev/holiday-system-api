@@ -5,12 +5,14 @@ import { dataEnterprises } from "./data-enterprises";
 import { dataDepartments } from "./data-departments";
 import { dataUsers } from "./data-users";
 import { dataHolidays } from "./data-holiday";
+import { dataSeniority } from "./data-seniority";
 
 // MODELS
 import User, { UserDocument } from "../models/userModel";
 import Enterprise, { EnterpriseDocument } from "../models/enterpriseModel";
 import Department, { DepartmentDocument } from "../models/departmentModel";
 import Holiday, { HolidayDocument } from "../models/holidayModel";
+import Seniority, { SeniorityDocument } from "../models/seniorityModel";
 
 import "dotenv/config";
 
@@ -19,9 +21,15 @@ type UserModel = Model<UserDocument>;
 type EnterpriseModel = Model<EnterpriseDocument>;
 type DepartmentModel = Model<DepartmentDocument>;
 type HolidayModel = Model<HolidayDocument>;
+type SeniorityModel = Model<SeniorityDocument>;
 
 // Define ModelType as a union of all possible model types
-type ModelType = UserModel | EnterpriseModel | DepartmentModel | HolidayModel;
+type ModelType =
+  | UserModel
+  | EnterpriseModel
+  | DepartmentModel
+  | HolidayModel
+  | SeniorityModel;
 
 // DATAS
 const collectionsNames: string[] = [
@@ -30,16 +38,30 @@ const collectionsNames: string[] = [
   "user",
   "holiday",
   "all",
+  "seniority",
 ];
 
-const collectionsModel: ModelType[] = [Department, Enterprise, User, Holiday];
+const collectionsModel: ModelType[] = [
+  Department,
+  Enterprise,
+  User,
+  Holiday,
+  Seniority,
+];
 
 const JSONFiles: (
   | Partial<DepartmentDocument>[]
   | Partial<EnterpriseDocument>[]
   | Partial<UserDocument>[]
   | Partial<HolidayDocument>[]
-)[] = [dataDepartments, dataEnterprises, dataUsers, dataHolidays];
+  | Partial<SeniorityDocument>[]
+)[] = [
+  dataDepartments,
+  dataEnterprises,
+  dataUsers,
+  dataHolidays,
+  dataSeniority,
+];
 
 // CONNECTION WITH DB
 connection();
@@ -50,7 +72,8 @@ const importData = async (
     | Partial<UserDocument>[]
     | Partial<EnterpriseDocument>[]
     | Partial<DepartmentDocument>[]
-    | Partial<HolidayDocument>[],
+    | Partial<HolidayDocument>[]
+    | Partial<SeniorityDocument>[],
   Model: ModelType
 ): Promise<void> => {
   try {
@@ -85,6 +108,7 @@ const removeAllData = async (Model: ModelType): Promise<void> => {
   // console.log(process.argv[3], "all");
   if (process.argv[3] === "all") {
     if (process.argv[2] === "import") {
+      await importData(JSONFiles[4], collectionsModel[4]);
       await importData(JSONFiles[1], collectionsModel[1]);
       await importData(JSONFiles[0], collectionsModel[0]);
       await importData(JSONFiles[2], collectionsModel[2]);
@@ -94,6 +118,7 @@ const removeAllData = async (Model: ModelType): Promise<void> => {
     if (process.argv[2] === "remove") {
       await removeAllData(collectionsModel[1]);
       await removeAllData(collectionsModel[0]);
+      await removeAllData(collectionsModel[4]);
       await removeAllData(collectionsModel[2]);
       await removeAllData(collectionsModel[3]);
     }
@@ -105,6 +130,7 @@ const removeAllData = async (Model: ModelType): Promise<void> => {
     | Partial<EnterpriseDocument>[]
     | Partial<DepartmentDocument>[]
     | Partial<HolidayDocument>[]
+    | Partial<SeniorityDocument>[]
     | undefined;
   let collection: ModelType | undefined;
 

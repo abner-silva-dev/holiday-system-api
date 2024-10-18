@@ -61,7 +61,10 @@ export const getOne = <T>(Model: Model<T>, popOptions?: { path: string }) => {
 export const createOne = <T>(Model: Model<T>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await Model.create(req.body);
+      const filteredBody = { ...req.body };
+      if (req.file) filteredBody.photo = req.file.filename;
+
+      const data = await Model.create(filteredBody);
 
       if (!data) {
         throw new Error("Data don't exitst");
@@ -80,7 +83,10 @@ export const createOne = <T>(Model: Model<T>) => {
 export const updateOne = <T>(Model: Model<T>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      const filteredBody = { ...req.body };
+      if (req.file) filteredBody.photo = req.file.filename;
+
+      const data = await Model.findByIdAndUpdate(req.params.id, filteredBody, {
         new: true,
         runValidators: true,
       });

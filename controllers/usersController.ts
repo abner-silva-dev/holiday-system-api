@@ -12,15 +12,20 @@ import {
 
 import AppError from "../utils/appError";
 import { Request, NextFunction, Response } from "express";
+import { error } from "console";
 
 const multerStorage = multer.memoryStorage();
 
-const multerFilter = (req: Request, file: Express.Multer.File, cb) => {
+const multerFilter = (
+  req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+) => {
   if (file.mimetype.startsWith("image")) {
     return cb(null, true);
   }
 
-  cb(new AppError("Not an image! Please upload only images", 400), false);
+  cb(new AppError("Not an image! Please upload only images", 400));
 };
 
 const upload = multer({
@@ -119,25 +124,76 @@ export const getAllUser = async (
 
 // export const getAllUser = getAll(User, { path: "holidays" });
 export const getUser = getOne(User, { path: "holidays" });
-export const createUser = createOne(User);
 export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
+// export const createUser = createOne(User);
 
-// export const createUser = <T>(Model: Model<T>) => {
-//   return async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const data = await Model.create(req.body);
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = await User.create(req.body);
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+    req.user = data;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
 
-//       if (!data) {
-//         throw new Error("Data don't exitst");
-//       }
+export const sendResponse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    let user = req.user;
+    if (req.file) {
+      user = await User.findByIdAndUpdate(
+        req.user.id,
+        { photo: req.file.filename },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    }
 
-//       res.status(200).json({
-//         status: "success",
-//         data,
-//       });
-//     } catch (err) {
-//       next(err);
+    res.status(200).json({
+      status: "success",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// export const createUser = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const data = await User.create(req.body);
+
+//     const filteredBody = { ...req.body };
+//     if (req.file) filteredBody.photo = req.file.filename;
+
+//     data.id;
+
+//     if (!data) {
+//       throw new Error("Data don't exitst");
 //     }
-//   };
+
+// res.status(200).json({
+//   status: "success",
+//   data,
+// });
+//   } catch (err) {
+//     next(err);
+//   }
 // };
