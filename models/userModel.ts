@@ -62,6 +62,12 @@ const userSchema = new Schema(
     daysGrantedBySeniority: {
       type: Number,
     },
+    daysGrantedBySeniorityFuture: {
+      type: Number,
+    },
+    daysGrantedBySeniorityPast: {
+      type: Number,
+    },
     credit: {
       balance: {
         type: Number,
@@ -154,33 +160,33 @@ userSchema.pre("find", async function name(next) {
 });
 
 // VALIDATION SET SENIORITY
-// userSchema.pre("save", async function (next) {
-// if (!this.dateHiring) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.dateHiring) return next();
+  if (!this.isNew) return next();
 
-// console.log(this.dateHiring);
-// if (!this.isNew) return next();
+  const { years } = computeSeniority(this.dateHiring);
+  const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
+  const daysAvailables = (await getDaysAvailables(years)) || 0;
+  const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
 
-// const { years } = computeSeniority(this.dateHiring);
-// const daysAvailables = (await getDaysAvailables(years)) || 0;
-// const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
+  const currentDate = new Date();
+  const dateHiring = new Date(this.dateHiring);
+  const nextPeriod = new Date(
+    currentDate.getFullYear() - dateHiring.getFullYear() + 1,
+    dateHiring.getMonth(),
+    dateHiring.getDate()
+  );
 
-// const currentDate = new Date();
-// const dateHiring = new Date(this.dateHiring);
-// const nextPeriod = new Date(
-//   currentDate.getFullYear() - dateHiring.getFullYear() + 1,
-//   dateHiring.getMonth(),
-//   dateHiring.getDate()
-// );
+  this.credit = { balance: daysAvailables, exp: new Date(nextPeriod) };
+  this.creditFuture = {
+    balance: daysAvailablesFuture,
+  };
+  this.daysGrantedBySeniority = daysAvailablesPast;
+  this.daysGrantedBySeniorityFuture = daysAvailablesFuture;
+  this.daysGrantedBySeniorityPast = daysAvailables;
 
-// this.credit = { balance: daysAvailables, exp: new Date(nextPeriod) };
-// this.creditFuture = {
-//   balance: daysAvailablesFuture,
-// };
-// this.daysGrantedBySeniority = daysAvailables;
-// this.credit;
-
-// next();
-// });
+  next();
+});
 
 // PASSWORD
 userSchema.pre("save", async function (next) {
