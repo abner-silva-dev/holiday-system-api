@@ -181,9 +181,9 @@ userSchema.pre("save", async function (next) {
   this.creditFuture = {
     balance: daysAvailablesFuture,
   };
-  this.daysGrantedBySeniority = daysAvailablesPast;
+  this.daysGrantedBySeniority = daysAvailables;
   this.daysGrantedBySeniorityFuture = daysAvailablesFuture;
-  this.daysGrantedBySeniorityPast = daysAvailables;
+  this.daysGrantedBySeniorityPast = daysAvailablesPast;
 
   next();
 });
