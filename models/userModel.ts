@@ -172,12 +172,15 @@ userSchema.pre("save", async function (next) {
   const currentDate = new Date();
   const dateHiring = new Date(this.dateHiring);
   const nextPeriod = new Date(
-    currentDate.getFullYear() - dateHiring.getFullYear() + 1,
+    currentDate.getFullYear() + 1,
     dateHiring.getMonth(),
     dateHiring.getDate()
   );
-
   this.credit = { balance: daysAvailables, exp: new Date(nextPeriod) };
+
+  const expCreditPast = nextPeriod.setMonth(nextPeriod.getMonth() + 2);
+  this.creditPast = { balance: daysAvailables, exp: new Date(expCreditPast) };
+
   this.creditFuture = {
     balance: daysAvailablesFuture,
   };
