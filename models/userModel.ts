@@ -219,7 +219,10 @@ userSchema.pre("save", async function (next) {
   this.credit = { balance: daysAvailables, exp: new Date(nextPeriod) };
 
   const expCreditPast = nextPeriod.setMonth(nextPeriod.getMonth() + 2);
-  this.creditPast = { balance: daysAvailables, exp: new Date(expCreditPast) };
+  this.creditPast = {
+    balance: daysAvailablesPast,
+    exp: new Date(expCreditPast),
+  };
 
   this.creditFuture = {
     balance: daysAvailablesFuture,
