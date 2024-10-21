@@ -1,4 +1,5 @@
 import mongoose, { Query, Document, Model } from "mongoose";
+import User from "./userModel";
 
 const { Schema } = mongoose;
 
@@ -83,6 +84,35 @@ holidaySchema.pre<Query<any, any>>(/^find/, function (next) {
 
   next();
 });
+
+// holidaySchema.pre("save", function (next) {
+//   console.log(this);
+// });
+
+// holidaySchema.pre("findOneAndUpdate", async function (next) {
+//   const update = this.getUpdate();
+//   console.log(update);
+
+//   if (!update) return;
+//   // Check if the update is using $set, as this is often the case with findOneAndUpdate
+//   const holiday = update.$set ? update.$set : update;
+
+//   if (!holiday) return next();
+//   // Check if both admin and manager approved the holiday
+//   if (
+//     holiday.authorizationAdmin === "approved" &&
+//     holiday.authorizationManager === "approved"
+//   ) {
+//     const user = await User.findById(holiday.user.id);
+//     console.log(user);
+//     const numberOfDays = holiday.days.length;
+//     const credit = user?.credit?.balance || 0;
+//     if (user && user.credit && credit >= numberOfDays) {
+//       user.credit.balance = credit - numberOfDays;
+//       await user.save({ validateBeforeSave: true });
+//     }
+//   // }
+// });
 
 // holidaySchema.pre("findOneAndUpdate", async function (next) {
 //   const update = this.getUpdate();

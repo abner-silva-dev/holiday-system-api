@@ -53,8 +53,9 @@ export const getDaysAvailables = async (yearsWorked: number) => {
   }
 };
 
-export const getAllSeniority = getAll(Seniority);
 export const createSeniority = createOne(Seniority);
+
+export const getAllSeniority = getAll(Seniority);
 export const updateSeniority = updateOne(Seniority);
 export const deleteSeniority = deleteOne(Seniority);
 
