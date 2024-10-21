@@ -24,7 +24,21 @@ export interface UserDocument extends Document {
   credit?: { balance: number; exp: Date };
   creditFuture?: { balance: number };
   creditPast?: { balance: number; exp: Date };
-  daysGrantedBySeniority?: number;
+  daysGrantedBySeniority?: {
+    balance: number;
+    startDate: Date;
+    endDate: Date;
+  };
+  daysGrantedBySeniorityFuture?: {
+    balance: number;
+    startDate: Date;
+    endDate: Date;
+  };
+  daysGrantedBySeniorityPast?: {
+    balance: number;
+    startDate: Date;
+    endDate: Date;
+  };
   enterprise: mongoose.Types.ObjectId;
   department: mongoose.Types.ObjectId;
   holidays?: HolidayDocument[];
@@ -60,13 +74,19 @@ const userSchema = new Schema(
       requiered: [true, "Por favor proporcione un numero de telefono"],
     },
     daysGrantedBySeniority: {
-      type: Number,
+      startDate: Date,
+      endDate: Date,
+      balance: Number,
     },
     daysGrantedBySeniorityFuture: {
-      type: Number,
+      startDate: Date,
+      endDate: Date,
+      balance: Number,
     },
     daysGrantedBySeniorityPast: {
-      type: Number,
+      startDate: Date,
+      endDate: Date,
+      balance: Number,
     },
     credit: {
       balance: {
@@ -159,6 +179,26 @@ userSchema.pre("find", async function name(next) {
   // console.log("*");
 });
 
+type Time = -2 | -1 | 0;
+
+const computePeriod = (dateHiring: Date, time: Time) => {
+  const currentDate = new Date();
+
+  const startDate = new Date(
+    currentDate.getFullYear() + time,
+    dateHiring.getMonth(),
+    dateHiring.getDate() + 1
+  );
+
+  const endDate = new Date(
+    currentDate.getFullYear() + time + 1,
+    dateHiring.getMonth(),
+    dateHiring.getDate()
+  );
+
+  return { startDate, endDate };
+};
+
 // VALIDATION SET SENIORITY
 userSchema.pre("save", async function (next) {
   if (!this.dateHiring) return next();
@@ -184,9 +224,19 @@ userSchema.pre("save", async function (next) {
   this.creditFuture = {
     balance: daysAvailablesFuture,
   };
-  this.daysGrantedBySeniority = daysAvailables;
-  this.daysGrantedBySeniorityFuture = daysAvailablesFuture;
-  this.daysGrantedBySeniorityPast = daysAvailablesPast;
+
+  this.daysGrantedBySeniority = {
+    balance: daysAvailables,
+    ...computePeriod(this.dateHiring, -1),
+  };
+  this.daysGrantedBySeniorityFuture = {
+    balance: daysAvailablesFuture,
+    ...computePeriod(this.dateHiring, 0),
+  };
+  this.daysGrantedBySeniorityPast = {
+    balance: daysAvailablesPast,
+    ...computePeriod(this.dateHiring, -2),
+  };
 
   next();
 });
