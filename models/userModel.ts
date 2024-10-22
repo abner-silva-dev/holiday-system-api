@@ -5,6 +5,7 @@ import { Model } from "mongoose";
 import { HolidayDocument } from "./holidayModel";
 import { start } from "repl";
 import {
+  calculatedPeriod,
   computeSeniority,
   getDaysAvailables,
 } from "../controllers/seniorityController";
@@ -23,7 +24,7 @@ export interface UserDocument extends Document {
   phoneNumber: string;
   credit?: { balance: number; exp: Date };
   creditFuture?: { balance: number };
-  creditPast?: { balance: number; exp: Date };
+  creditPast?: { balance: number; exp: Date | null };
   daysGrantedBySeniority?: {
     balance: number;
     startDate: Date;
@@ -179,66 +180,63 @@ userSchema.pre("find", async function name(next) {
   // console.log("*");
 });
 
-type Time = -2 | -1 | 0;
-
-const computePeriod = (dateHiring: Date, time: Time) => {
-  const currentDate = new Date();
-
-  const startDate = new Date(
-    currentDate.getFullYear() + time,
-    dateHiring.getMonth(),
-    dateHiring.getDate() + 1
-  );
-
-  const endDate = new Date(
-    currentDate.getFullYear() + time + 1,
-    dateHiring.getMonth(),
-    dateHiring.getDate()
-  );
-
-  return { startDate, endDate };
-};
-
 // VALIDATION SET SENIORITY
 userSchema.pre("save", async function (next) {
   if (!this.dateHiring) return next();
   if (!this.isNew) return next();
 
+  // Compute current years
   const { years } = computeSeniority(this.dateHiring);
+
+  // const currentDate = new Date();
+  // const dateHiring = new Date(this.dateHiring);
+
   const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
   const daysAvailables = (await getDaysAvailables(years)) || 0;
   const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
 
-  const currentDate = new Date();
-  const dateHiring = new Date(this.dateHiring);
-  const nextPeriod = new Date(
-    currentDate.getFullYear() + 1,
-    dateHiring.getMonth(),
-    dateHiring.getDate()
-  );
-  this.credit = { balance: daysAvailables, exp: new Date(nextPeriod) };
+  const currentPeriod = calculatedPeriod(this.dateHiring, 0);
 
-  const expCreditPast = nextPeriod.setMonth(nextPeriod.getMonth() + 2);
+  const updatedDate = new Date(currentPeriod.endDate);
+  updatedDate.setMonth(updatedDate.getMonth() + 2);
+
+  const expirationPast = updatedDate;
+
+  this.credit = {
+    balance: daysAvailables,
+    exp: currentPeriod.endDate,
+  };
+
   this.creditPast = {
     balance: daysAvailablesPast,
-    exp: new Date(expCreditPast),
+    exp: daysAvailablesPast ? expirationPast : null,
   };
 
   this.creditFuture = {
     balance: daysAvailablesFuture,
   };
 
-  this.daysGrantedBySeniority = {
-    balance: daysAvailables,
-    ...computePeriod(this.dateHiring, -1),
-  };
-  this.daysGrantedBySeniorityFuture = {
-    balance: daysAvailablesFuture,
-    ...computePeriod(this.dateHiring, 0),
-  };
+  // Static credit
+
+  // Past
   this.daysGrantedBySeniorityPast = {
     balance: daysAvailablesPast,
-    ...computePeriod(this.dateHiring, -2),
+    // ...calculatedPeriod(this.dateHiring, -2),
+    ...calculatedPeriod(this.dateHiring, -1),
+  };
+
+  // Current
+  this.daysGrantedBySeniority = {
+    balance: daysAvailables,
+    // ...calculatedPeriod(this.dateHiring, -1),
+    ...calculatedPeriod(this.dateHiring, 0),
+  };
+
+  // Future
+  this.daysGrantedBySeniorityFuture = {
+    balance: daysAvailablesFuture,
+    // ...calculatedPeriod(this.dateHiring, 0),
+    ...calculatedPeriod(this.dateHiring, 1),
   };
 
   next();

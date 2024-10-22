@@ -53,6 +53,42 @@ export const getDaysAvailables = async (yearsWorked: number) => {
   }
 };
 
+type Time = -1 | 0 | 1;
+
+/**
+ * Computes the start and end period based on the hiring date and a relative time value.
+ *
+ * @param dateHiring - The date when the employee was hired.
+ * @param time - The relative period that determines which year to compute.
+ *               - `-1` previous period, `0` current period,  `1` next period.
+ * @returns An object containing the start and end dates of the computed period.
+ *
+ * @example
+ * ```ts
+ * const dateHiring = new Date('2020-05-15');
+ * const period = computePeriod(dateHiring, -1);
+ * // period = { startDate: Date, endDate: Date }
+ * ```
+ */
+
+export const calculatedPeriod = (dateHiring: Date, time: Time) => {
+  const currentDate = new Date();
+
+  const startDate = new Date(
+    currentDate.getFullYear() + time,
+    dateHiring.getMonth(),
+    dateHiring.getDate() + 1
+  );
+
+  const endDate = new Date(
+    currentDate.getFullYear() + time + 1,
+    dateHiring.getMonth(),
+    dateHiring.getDate()
+  );
+
+  return { startDate, endDate };
+};
+
 export const createSeniority = createOne(Seniority);
 
 export const getAllSeniority = getAll(Seniority);

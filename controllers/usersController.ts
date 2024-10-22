@@ -13,6 +13,11 @@ import {
 import AppError from "../utils/appError";
 import { Request, NextFunction, Response } from "express";
 import { error } from "console";
+import {
+  calculatedPeriod,
+  computeSeniority,
+  getDaysAvailables,
+} from "./seniorityController";
 
 const multerStorage = multer.memoryStorage();
 
@@ -127,6 +132,72 @@ export const getUser = getOne(User, { path: "holidays" });
 export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
 // export const createUser = createOne(User);
+
+export const verifyCredit = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = await User.findById(req.params.id);
+  const currentDate = new Date();
+  if (!user?.credit?.exp) return next();
+
+  if (currentDate > user?.credit?.exp) {
+    console.log("expired");
+
+    const creditTemp = { ...user.credit };
+    const creditFuture = {
+      ...user.creditFuture,
+      balance: user.creditFuture?.balance || 0, // Ensure balance is a number
+    };
+
+    const { years } = computeSeniority(user.dateHiring);
+
+    const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
+    const daysAvailables = (await getDaysAvailables(years)) || 0;
+    const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
+
+    const currentPeriod = calculatedPeriod(user.dateHiring, 0);
+
+    user.credit = {
+      ...creditFuture,
+      exp: currentPeriod.endDate,
+    };
+
+    // update past credit.
+    user.creditPast = {
+      ...creditTemp,
+      exp: null,
+      balance: user.credit?.balance || 0, // Ensure balance is a number
+    };
+
+    user.creditFuture = {
+      balance: daysAvailablesFuture, // This is now always a number
+    };
+
+    // Past
+    user.daysGrantedBySeniorityPast = {
+      balance: daysAvailablesPast,
+      ...calculatedPeriod(user.dateHiring, -1),
+    };
+
+    // Current
+    user.daysGrantedBySeniority = {
+      balance: daysAvailables,
+      ...calculatedPeriod(user.dateHiring, 0),
+    };
+
+    // Future
+    user.daysGrantedBySeniorityFuture = {
+      balance: daysAvailablesFuture,
+      ...calculatedPeriod(user.dateHiring, 1),
+    };
+
+    await user.save();
+  }
+
+  next();
+};
 
 export const createUser = async (
   req: Request,

@@ -33,7 +33,7 @@ router
 
 router
   .route("/:id")
-  .get(usersController.getUser)
+  .get(usersController.verifyCredit, usersController.getUser)
   .delete(usersController.deleteUser)
   .patch(
     usersController.uploadUserPhoto,
