@@ -178,74 +178,74 @@ userSchema.pre("find", async function name(next) {
 });
 
 // VALIDATION SET SENIORITY
-// userSchema.pre("save", async function (next) {
-//   if (!this.dateHiring) return next();
-//   if (!this.isNew) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.dateHiring) return next();
+  if (!this.isNew) return next();
 
-//   // Compute current years
-//   const { years } = computeSeniority(this.dateHiring);
+  // Compute current years
+  const { years } = computeSeniority(this.dateHiring);
 
-//   // const currentDate = new Date();
-//   // const dateHiring = new Date(this.dateHiring);
+  // const currentDate = new Date();
+  // const dateHiring = new Date(this.dateHiring);
 
-//   const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
-//   const daysAvailables = (await getDaysAvailables(years)) || 0;
-//   const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
+  const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
+  const daysAvailables = (await getDaysAvailables(years)) || 0;
+  const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
 
-//   const currentPeriod = calculatedPeriod(this.dateHiring, 0);
+  const currentPeriod = calculatedPeriod(this.dateHiring, 0);
 
-//   const updatedDate = new Date(currentPeriod.endDate);
-//   updatedDate.setMonth(updatedDate.getMonth() + 2);
+  const updatedDate = new Date(currentPeriod.endDate);
+  updatedDate.setMonth(updatedDate.getMonth() + 2);
 
-//   const expirationPast = updatedDate;
+  const expirationPast = updatedDate;
 
-//   this.credit = {
-//     balance: daysAvailables,
-//     exp: currentPeriod.endDate,
-//   };
+  this.credit = {
+    balance: daysAvailables,
+    exp: currentPeriod.endDate,
+  };
 
-//   this.creditPast = {
-//     balance: daysAvailablesPast,
-//     exp: daysAvailablesPast ? expirationPast : null,
-//   };
+  this.creditPast = {
+    balance: daysAvailablesPast,
+    exp: daysAvailablesPast ? expirationPast : null,
+  };
 
-//   this.creditFuture = {
-//     balance: daysAvailablesFuture,
-//   };
+  this.creditFuture = {
+    balance: daysAvailablesFuture,
+  };
 
-//   // Static credit
+  // Static credit
 
-//   // Past
-//   this.daysGrantedBySeniorityPast = {
-//     balance: daysAvailablesPast,
-//     // ...calculatedPeriod(this.dateHiring, -2),
-//     ...calculatedPeriod(this.dateHiring, -1),
-//   };
+  // Past
+  this.daysGrantedBySeniorityPast = {
+    balance: daysAvailablesPast,
+    // ...calculatedPeriod(this.dateHiring, -2),
+    ...calculatedPeriod(this.dateHiring, -1),
+  };
 
-//   // Current
-//   this.daysGrantedBySeniority = {
-//     balance: daysAvailables,
-//     // ...calculatedPeriod(this.dateHiring, -1),
-//     ...calculatedPeriod(this.dateHiring, 0),
-//   };
+  // Current
+  this.daysGrantedBySeniority = {
+    balance: daysAvailables,
+    // ...calculatedPeriod(this.dateHiring, -1),
+    ...calculatedPeriod(this.dateHiring, 0),
+  };
 
-//   // Future
-//   this.daysGrantedBySeniorityFuture = {
-//     balance: daysAvailablesFuture,
-//     // ...calculatedPeriod(this.dateHiring, 0),
-//     ...calculatedPeriod(this.dateHiring, 1),
-//   };
+  // Future
+  this.daysGrantedBySeniorityFuture = {
+    balance: daysAvailablesFuture,
+    // ...calculatedPeriod(this.dateHiring, 0),
+    ...calculatedPeriod(this.dateHiring, 1),
+  };
 
-//   next();
-// });
+  next();
+});
 
 // PASSWORD
-// userSchema.pre("save", async function (next) {
-//   //Only run this function if password was modified
-//   if (!this.isModified("password")) return next();
-//   this.passwordConfirm = undefined;
-//   next();
-// });
+userSchema.pre("save", async function (next) {
+  //Only run this function if password was modified
+  if (!this.isModified("password")) return next();
+  this.passwordConfirm = undefined;
+  next();
+});
 
 /*METHODS (point to current DOC)*/
 userSchema.methods.correctPassword = (
