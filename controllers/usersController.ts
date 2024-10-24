@@ -2,22 +2,16 @@ import User from "../models/userModel";
 import multer, { FileFilterCallback } from "multer";
 import sharp from "sharp";
 
-import {
-  createOne,
-  deleteOne,
-  getAll,
-  getOne,
-  updateOne,
-} from "./handleFactory";
+import { createOne, deleteOne, getOne, updateOne } from "./handleFactory";
 
 import AppError from "../utils/appError";
 import { Request, NextFunction, Response } from "express";
-import { error } from "console";
 import {
   calculatedPeriod,
   computeSeniority,
   getDaysAvailables,
 } from "./seniorityController";
+import catchAsync from "../utils/catchAsync";
 
 const multerStorage = multer.memoryStorage();
 
@@ -40,12 +34,8 @@ const upload = multer({
 
 export const uploadUserPhoto = upload.single("photo");
 
-export const resizeUserPhoto = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const resizeUserPhoto = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     if (!req.file) return next();
 
     req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -57,22 +47,16 @@ export const resizeUserPhoto = async (
       .toFile(`public/img/user/${req.file.filename}`);
 
     next();
-  } catch (error) {
-    next(error);
   }
-};
+);
 
 export const getMe = (req: Request, res: Response, next: NextFunction) => {
   req.params.id = req.user.id;
   next();
 };
 
-export const updateMe = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const updateMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     // 1) Create error if user POSTs password data
     if (req.body.password || req.body.passwordConfirm)
       return next(
@@ -98,17 +82,11 @@ export const updateMe = async (
         user: updateUser,
       },
     });
-  } catch (error) {
-    next(error);
   }
-};
+);
 
-export const getAllUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const getAllUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     let query = User.find({});
 
     if (req.user.role === "manager")
@@ -122,10 +100,8 @@ export const getAllUser = async (
       results: docs.length,
       data: docs,
     });
-  } catch (err) {
-    next(err);
   }
-};
+);
 
 // export const getAllUser = getAll(User, { path: "holidays" });
 export const getUser = getOne(User, { path: "holidays" });
@@ -133,96 +109,90 @@ export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
 // export const createUser = createOne(User);
 
-export const verifyCredit = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const user = await User.findById(req.params.id);
-  const currentDate = new Date();
-  if (!user?.credit?.exp) return next();
+export const verifyCredit = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.params.id);
+    const currentDate = new Date();
+    if (!user?.credit?.exp) return next();
 
-  if (currentDate > user?.credit?.exp) {
-    console.log("expired");
+    if (currentDate > user?.credit?.exp) {
+      const creditTemp = { ...user.credit };
+      const creditFuture = {
+        ...user.creditFuture,
+        balance: user.creditFuture?.balance || 0, // Ensure balance is a number
+      };
 
-    const creditTemp = { ...user.credit };
-    const creditFuture = {
-      ...user.creditFuture,
-      balance: user.creditFuture?.balance || 0, // Ensure balance is a number
-    };
+      const { years } = computeSeniority(user.dateHiring);
 
-    const { years } = computeSeniority(user.dateHiring);
+      const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
+      const daysAvailables = (await getDaysAvailables(years)) || 0;
+      const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
 
-    const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
-    const daysAvailables = (await getDaysAvailables(years)) || 0;
-    const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
+      const currentPeriod = calculatedPeriod(user.dateHiring, 0);
 
-    const currentPeriod = calculatedPeriod(user.dateHiring, 0);
+      user.credit = {
+        ...creditFuture,
+        exp: currentPeriod.endDate,
+      };
 
-    user.credit = {
-      ...creditFuture,
-      exp: currentPeriod.endDate,
-    };
+      // update past credit.
+      user.creditPast = {
+        ...creditTemp,
+        exp: null,
+        balance: user.credit?.balance || 0, // Ensure balance is a number
+      };
 
-    // update past credit.
-    user.creditPast = {
-      ...creditTemp,
-      exp: null,
-      balance: user.credit?.balance || 0, // Ensure balance is a number
-    };
+      user.creditFuture = {
+        balance: daysAvailablesFuture, // This is now always a number
+      };
 
-    user.creditFuture = {
-      balance: daysAvailablesFuture, // This is now always a number
-    };
+      // Past
+      user.daysGrantedBySeniorityPast = {
+        balance: daysAvailablesPast,
+        ...calculatedPeriod(user.dateHiring, -1),
+      };
 
-    // Past
-    user.daysGrantedBySeniorityPast = {
-      balance: daysAvailablesPast,
-      ...calculatedPeriod(user.dateHiring, -1),
-    };
+      // Current
+      user.daysGrantedBySeniority = {
+        balance: daysAvailables,
+        ...calculatedPeriod(user.dateHiring, 0),
+      };
 
-    // Current
-    user.daysGrantedBySeniority = {
-      balance: daysAvailables,
-      ...calculatedPeriod(user.dateHiring, 0),
-    };
+      // Future
+      user.daysGrantedBySeniorityFuture = {
+        balance: daysAvailablesFuture,
+        ...calculatedPeriod(user.dateHiring, 1),
+      };
 
-    // Future
-    user.daysGrantedBySeniorityFuture = {
-      balance: daysAvailablesFuture,
-      ...calculatedPeriod(user.dateHiring, 1),
-    };
-
-    await user.save();
-  }
-
-  next();
-};
-
-export const createUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const data = await User.create(req.body);
-    if (!data) {
-      throw new Error("Data don't exitst");
+      await user.save();
     }
-    req.user = data;
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
 
-export const sendResponse = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+    next();
+  }
+);
+
+export const createUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await User.create(req.body);
+
+    // If no user was created, throw an error.
+    if (!data) {
+      return next(new AppError("Data doesn't exist", 400)); // Or any error code you prefer
+    }
+
+    // Attach the user to the request
+    req.user = data;
+
+    // Call the next middleware
+    next();
+  }
+);
+
+export const sendResponse = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     let user = req.user;
+
+    // If there's a file, update the user
     if (req.file) {
       user = await User.findByIdAndUpdate(
         req.user.id,
@@ -234,37 +204,10 @@ export const sendResponse = async (
       );
     }
 
+    // Send response
     res.status(200).json({
       status: "success",
       user,
     });
-  } catch (error) {
-    next(error);
   }
-};
-
-// export const createUser = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const data = await User.create(req.body);
-
-//     const filteredBody = { ...req.body };
-//     if (req.file) filteredBody.photo = req.file.filename;
-
-//     data.id;
-
-//     if (!data) {
-//       throw new Error("Data don't exitst");
-//     }
-
-// res.status(200).json({
-//   status: "success",
-//   data,
-// });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+);

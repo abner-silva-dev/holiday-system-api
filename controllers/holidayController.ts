@@ -26,7 +26,6 @@ export const getAllHoliday = async (
       const users = await User.find({ department: req.user.department });
       const userIds = users.map((user) => user._id);
       docs = await Holiday.find({ user: { $in: userIds } });
-      console.log(docs);
     } else {
       docs = await Holiday.find({});
     }

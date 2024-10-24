@@ -5,7 +5,6 @@ export const dataEnterprises = [
     nameAbreviate: "DAI",
     email: "dai@gmail.com",
     phoneNumber: "34345343233",
-    logo: "",
   },
   {
     _id: "66d8b097a37e7c7823c03a12",
@@ -13,6 +12,5 @@ export const dataEnterprises = [
     nameAbreviate: "SMA",
     email: "smautomotive@gmail.com",
     phoneNumber: "23423423232",
-    logo: "",
   },
 ];

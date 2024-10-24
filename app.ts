@@ -7,4 +7,13 @@ connectionDB();
 
 const server = new Server();
 
-server.listen();
+const serv = server.listen();
+
+//handler error asyncronus
+// process.on("unhandledRejection", (err: Error) => {
+//   console.log("UNHANDLED REJECTION! 💥 Shutting down...");
+//   console.log(err.name, err.message);
+//   serv.close(() => {
+//     process.exit(1);
+//   });
+// });

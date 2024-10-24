@@ -8,7 +8,7 @@ import enterpriseRoutes from "../routes/enterpriseRoutes";
 import usersRoutes from "../routes/usersRoutes";
 import seniorityRoutes from "../routes/seniorityRoutes";
 import AppError from "../utils/appError";
-import globalErrorHandler from "./../controllers/errorController";
+import { globalErrorHandler } from "./../controllers/errorController";
 
 class Server {
   private app: Application;
@@ -61,7 +61,7 @@ class Server {
   }
 
   listen() {
-    this.app.listen(this.port, () => {
+    return this.app.listen(this.port, () => {
       console.log(`Server listem in port ${this.port}`);
     });
   }

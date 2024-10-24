@@ -28,7 +28,7 @@ const enterpriseSchema = new Schema({
     type: String,
     requiere: [true, "An enterprise must be have a phone number"],
   },
-  logo: { type: String },
+  logo: { type: String, default: "default.png" },
 });
 
 enterpriseSchema.pre<Query<any, any>>(/^find/, function (next) {
