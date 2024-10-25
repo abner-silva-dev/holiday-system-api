@@ -180,13 +180,11 @@ userSchema.pre("find", async function name(next) {
 // VALIDATION SET SENIORITY
 userSchema.pre("save", async function (next) {
   if (!this.dateHiring) return next();
+
   if (!this.isNew) return next();
 
   // Compute current years
   const { years } = computeSeniority(this.dateHiring);
-
-  // const currentDate = new Date();
-  // const dateHiring = new Date(this.dateHiring);
 
   const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
   const daysAvailables = (await getDaysAvailables(years)) || 0;

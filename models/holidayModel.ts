@@ -16,6 +16,7 @@ export interface HolidayDocument {
   admin: mongoose.Types.ObjectId;
   manager: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
+  period: "past" | "present" | "future";
 }
 
 const holidaySchema = new Schema(
@@ -23,6 +24,11 @@ const holidaySchema = new Schema(
     days: {
       type: [Date],
       required: [true, "A holiday must have a day for create holidays"],
+    },
+    period: {
+      type: String,
+      enum: ["past", "present", "future"],
+      default: "present",
     },
     authorizationAdmin: {
       type: String,
@@ -44,18 +50,10 @@ const holidaySchema = new Schema(
     manager: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      // required: [
-      //   true,
-      //   "Las vacaciones deben estar asociadas a un jefe de departamento",
-      // ],
     },
     admin: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      // required: [
-      //   true,
-      //   "Las vacaciones deben estar asociadas a un administrador",
-      // ],
     },
     user: {
       type: Schema.Types.ObjectId,
