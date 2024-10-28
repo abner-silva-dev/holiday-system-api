@@ -29,10 +29,18 @@ class Server {
     // ABLE CORS
     this.app.use(
       cors({
-        origin: "http://localhost:5173",
-        credentials: true,
+        origin: ["http://192.168.68.126:5173", "http://192.168.68.126:5173"],
+        methods: ["GET", "POST", "PATCH", "DELETE"], // Métodos permitidos
+        credentials: true, // Si necesitas enviar cookies o autenticación
       })
     );
+
+    // this.app.use(
+    //   cors({
+    //     origin: "*", // Permite cualquier origen
+    //     credentials: true, // Permite el envío de cookies y credenciales
+    //   })
+    // );
 
     // SERVING STATIC FILES
     this.app.use(express.static("public"));
@@ -47,6 +55,9 @@ class Server {
   }
 
   routes() {
+    // this.app.use("/", (req, res) => {
+    //   res.end("hello");
+    // });
     this.app.use("/api/v1/department", departmentRoutes);
     this.app.use("/api/v1/holiday", holidayRoutes);
     this.app.use("/api/v1/enterprise", enterpriseRoutes);
