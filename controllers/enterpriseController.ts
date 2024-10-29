@@ -41,7 +41,7 @@ export const resizeEnterpriseLogo = catchAsync(
     req.file.filename = `enterprise-${req.params.id}-${Date.now()}.jpeg`;
 
     await sharp(req.file.buffer)
-      .resize(500, 500)
+      // .resize(500, 500)
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(`public/img/enterprise/${req.file.filename}`);
