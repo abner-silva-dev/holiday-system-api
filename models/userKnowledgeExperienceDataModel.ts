@@ -66,10 +66,10 @@ const knowledgeExperienceDataSchema =
     { toJSON: { virtuals: true }, toObject: { virtuals: true } }
   );
 
-const KnowledgeExperienceData: Model<KnowledgeExperienceDataDocument> =
+const UserKnowledgeExperienceData: Model<KnowledgeExperienceDataDocument> =
   mongoose.model<KnowledgeExperienceDataDocument>(
     "KnowledgeExperienceData",
     knowledgeExperienceDataSchema
   );
 
-export default KnowledgeExperienceData;
+export default UserKnowledgeExperienceData;

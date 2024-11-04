@@ -46,6 +46,20 @@ router
   .get(usersController.getScholarData)
   .patch(usersController.updateScholarData);
 
+//KNOWLEDGE AND EXPERIENCE
+router
+  .route("/:id/knowledgeExperience")
+  .post(usersController.createKnowledgeExperienceData)
+  .get(usersController.getKnowledgeExperienceData)
+  .patch(usersController.updateKnowledgeExperienceData);
+
+//KNOWLEDGE AND EXPERIENCE
+router
+  .route("/:id/familiarData")
+  .post(usersController.createFamiliarData)
+  .get(usersController.getFamiliarData)
+  .patch(usersController.updateFamiliarData);
+
 // CLINIC INFORMATION
 router
   .route("/:id/clinicInformation")

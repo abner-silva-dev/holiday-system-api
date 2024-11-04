@@ -93,7 +93,7 @@ const familiarDataSchema = new Schema<FamiliarDataDocument>(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-const FamiliarData: Model<FamiliarDataDocument> =
+const UserFamiliarData: Model<FamiliarDataDocument> =
   mongoose.model<FamiliarDataDocument>("FamiliarData", familiarDataSchema);
 
-export default FamiliarData;
+export default UserFamiliarData;

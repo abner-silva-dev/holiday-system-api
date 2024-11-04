@@ -16,6 +16,8 @@ import UserComplementaryData from "../models/userComplementaryDataModel";
 import User from "../models/userModel";
 import UserScholarData from "../models/userScholarDataModel";
 import UserClinicInformation from "../models/userClinicInformationDataModel";
+import UserKnowledgeExperienceData from "../models/userKnowledgeExperienceDataModel";
+import UserFamiliarData from "../models/userFamiliarDataModel";
 
 const multerStorage = multer.memoryStorage();
 
@@ -283,6 +285,98 @@ export const getScholarData = catchAsync(
   }
 );
 export const updateScholarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserComplementaryData.findByIdAndUpdate(
+      req.params.idRequest,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+// KNOWLEDGE AND EXPERIENCE DATA
+export const createKnowledgeExperienceData = createOne(
+  UserKnowledgeExperienceData
+);
+export const getKnowledgeExperienceData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const knowledgeExperience = await UserKnowledgeExperienceData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!knowledgeExperience)
+      throw new AppError(
+        `No se encontro ningun documento con id: ${req.params.idRequest}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: knowledgeExperience,
+    });
+  }
+);
+export const updateKnowledgeExperienceData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserComplementaryData.findByIdAndUpdate(
+      req.params.idRequest,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+// FAMILIAR DATA
+export const createFamiliarData = createOne(UserFamiliarData);
+export const getFamiliarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const familiarData = await UserFamiliarData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!familiarData)
+      throw new AppError(
+        `No se encontro ningun documento con id: ${req.params.idRequest}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: familiarData,
+    });
+  }
+);
+export const updateFamiliarData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = await UserComplementaryData.findByIdAndUpdate(
       req.params.idRequest,
