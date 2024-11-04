@@ -15,6 +15,7 @@ import catchAsync from "../utils/catchAsync";
 import UserComplementaryData from "../models/userComplementaryDataModel";
 import User from "../models/userModel";
 import UserScholarData from "../models/userScholarDataModel";
+import UserClinicInformation from "../models/userClinicInformationDataModel";
 
 const multerStorage = multer.memoryStorage();
 
@@ -222,16 +223,13 @@ export const createComplementaryData = createOne(UserComplementaryData);
 export const getComplementaryData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Searching document by id
-    const complementaryData = await UserComplementaryData.findById(
-      req.params.idRequest
-    );
+    const complementaryData = await UserComplementaryData.findOne({
+      user: req.params.id,
+    });
 
     // Handle errors
     if (!complementaryData)
-      throw new AppError(
-        `No se encontro ningun documento con id: ${req.params.idRequest}`,
-        404
-      );
+      throw new AppError(`No se encontro ningun documento`, 404);
 
     // Send data to client
     res.status(200).json({
@@ -240,6 +238,7 @@ export const getComplementaryData = catchAsync(
     });
   }
 );
+
 export const updateComplementaryData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = await UserComplementaryData.findByIdAndUpdate(
@@ -267,7 +266,7 @@ export const createScholarData = createOne(UserScholarData);
 export const getScholarData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Searching document by id
-    const scholarData = await UserScholarData.findById(req.params.idRequest);
+    const scholarData = await UserScholarData.findOne({ user: req.params.id });
 
     // Handle errors
     if (!scholarData)
@@ -296,6 +295,52 @@ export const updateScholarData = catchAsync(
 
     if (!data) {
       throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+//CLINIC INFORMATION
+export const createClinicInformation = createOne(UserClinicInformation);
+export const getClinicInformation = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const clinicInformation = await UserClinicInformation.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!clinicInformation)
+      throw new AppError(
+        `No se encontró ningún documento con id: ${req.params.clinicInfoId}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: clinicInformation,
+    });
+  }
+);
+
+export const updateClinicInformation = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserClinicInformation.findByIdAndUpdate(
+      req.params.clinicInfoId,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("La información no existe");
     }
 
     res.status(200).json({

@@ -35,20 +35,23 @@ router
 // COMPLEMENTARY DATA
 router
   .route("/:id/complementaryData")
-  .post(usersController.createComplementaryData);
-
-router
-  .route("/:id/complementaryData/:idRequest")
+  .post(usersController.createComplementaryData)
   .get(usersController.getComplementaryData)
   .patch(usersController.updateComplementaryData);
 
 // SCHOLAR DATA
-router.route("/:id/scholarData").post(usersController.createScholarData);
-
 router
-  .route("/:id/scholarData/:idRequest")
+  .route("/:id/scholarData")
+  .post(usersController.createScholarData)
   .get(usersController.getScholarData)
   .patch(usersController.updateScholarData);
+
+// CLINIC INFORMATION
+router
+  .route("/:id/clinicInformation")
+  .post(usersController.createClinicInformation)
+  .get(usersController.getClinicInformation)
+  .patch(usersController.updateClinicInformation);
 
 /******************************************************* */
 
