@@ -217,19 +217,17 @@ export const sendResponse = catchAsync(
 /* REQUEST CONTROLLERS */
 
 export const createComplementaryData = createOne(UserComplementaryData);
+
 export const getComplementaryData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Searching document by id
-    const complementaryData = await UserComplementaryData.findById(
-      req.params.idRequest
-    );
+    const complementaryData = await UserComplementaryData.findOne({
+      user: req.params.id,
+    });
 
     // Handle errors
     if (!complementaryData)
-      throw new AppError(
-        `No se encontro ningun documento con id: ${req.params.idRequest}`,
-        404
-      );
+      throw new AppError(`No se encontro ningun documento`, 404);
 
     // Send data to client
     res.status(200).json({
@@ -238,6 +236,7 @@ export const getComplementaryData = catchAsync(
     });
   }
 );
+
 export const updateComplementaryData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = await UserComplementaryData.findByIdAndUpdate(

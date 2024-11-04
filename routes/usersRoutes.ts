@@ -35,10 +35,7 @@ router
 
 router
   .route("/:id/complementaryData")
-  .post(usersController.createComplementaryData);
-
-router
-  .route("/:id/complementaryData/:idRequest")
+  .post(usersController.createComplementaryData)
   .get(usersController.getComplementaryData)
   .patch(usersController.updateComplementaryData);
 

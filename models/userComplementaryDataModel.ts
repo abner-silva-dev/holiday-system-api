@@ -6,18 +6,18 @@ interface ComplementaryDataDocument extends Document {
   curp: string;
   infonavitCredit: string;
   afore: string;
-  travelAvailability: boolean;
-  residenceChange: boolean;
+  travelAvailability: string;
+  residenceChange: string;
   license: string;
-  familyInCompany: boolean;
+  familyInCompany: string;
   jobSource: string;
-  previousWorkInCompany: boolean;
+  previousWorkInCompany: string;
   previousWorkDate?: Date;
   previousWorkDepartment?: string;
   currentLivingSituation: string;
-  economicDependents: boolean;
-  familyContribution: boolean;
-  ownsCar: boolean;
+  economicDependents: string;
+  familyContribution: string;
+  ownsCar: string;
   carModel?: string;
   user: mongoose.Types.ObjectId;
 }
@@ -29,18 +29,18 @@ const complementaryDataSchema = new Schema<ComplementaryDataDocument>(
     curp: { type: String, required: true },
     infonavitCredit: { type: String, required: true },
     afore: { type: String, required: true },
-    travelAvailability: { type: Boolean, required: true },
-    residenceChange: { type: Boolean, required: true },
+    travelAvailability: { type: String, required: true },
+    residenceChange: { type: String, required: true },
     license: { type: String, required: true },
-    familyInCompany: { type: Boolean, required: true },
+    familyInCompany: { type: String, required: true },
     jobSource: { type: String, required: true },
-    previousWorkInCompany: { type: Boolean, required: true },
+    previousWorkInCompany: { type: String, required: true },
     previousWorkDate: { type: Date },
     previousWorkDepartment: { type: String },
     currentLivingSituation: { type: String, required: true },
-    economicDependents: { type: Boolean, required: true },
-    familyContribution: { type: Boolean, required: true },
-    ownsCar: { type: Boolean, required: true },
+    economicDependents: { type: String, required: true },
+    familyContribution: { type: String, required: true },
+    ownsCar: { type: String, required: true },
     carModel: { type: String },
     user: {
       type: Schema.Types.ObjectId,
