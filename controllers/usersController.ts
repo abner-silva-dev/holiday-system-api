@@ -1,4 +1,3 @@
-import User from "../models/userModel";
 import multer, { FileFilterCallback } from "multer";
 import sharp from "sharp";
 
@@ -12,6 +11,10 @@ import {
   getDaysAvailables,
 } from "./seniorityController";
 import catchAsync from "../utils/catchAsync";
+
+import UserComplementaryData from "../models/userComplementaryDataModel";
+import User from "../models/userModel";
+import UserScholarData from "../models/userScholarDataModel";
 
 const multerStorage = multer.memoryStorage();
 
@@ -208,6 +211,96 @@ export const sendResponse = catchAsync(
     res.status(200).json({
       status: "success",
       user,
+    });
+  }
+);
+
+/* ********************************************************************************* */
+/* REQUEST CONTROLLERS */
+// COMPLEMENTARY DATA
+export const createComplementaryData = createOne(UserComplementaryData);
+export const getComplementaryData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const complementaryData = await UserComplementaryData.findById(
+      req.params.idRequest
+    );
+
+    // Handle errors
+    if (!complementaryData)
+      throw new AppError(
+        `No se encontro ningun documento con id: ${req.params.idRequest}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: complementaryData,
+    });
+  }
+);
+export const updateComplementaryData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserComplementaryData.findByIdAndUpdate(
+      req.params.idRequest,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+// SCHOLAR DATA
+export const createScholarData = createOne(UserScholarData);
+export const getScholarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const scholarData = await UserScholarData.findById(req.params.idRequest);
+
+    // Handle errors
+    if (!scholarData)
+      throw new AppError(
+        `No se encontro ningun documento con id: ${req.params.idRequest}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: scholarData,
+    });
+  }
+);
+export const updateScholarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserComplementaryData.findByIdAndUpdate(
+      req.params.idRequest,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
     });
   }
 );

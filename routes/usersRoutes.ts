@@ -31,6 +31,27 @@ router
     usersController.sendResponse
   );
 
+/* ROUTE REQUEST */
+// COMPLEMENTARY DATA
+router
+  .route("/:id/complementaryData")
+  .post(usersController.createComplementaryData);
+
+router
+  .route("/:id/complementaryData/:idRequest")
+  .get(usersController.getComplementaryData)
+  .patch(usersController.updateComplementaryData);
+
+// SCHOLAR DATA
+router.route("/:id/scholarData").post(usersController.createScholarData);
+
+router
+  .route("/:id/scholarData/:idRequest")
+  .get(usersController.getScholarData)
+  .patch(usersController.updateScholarData);
+
+/******************************************************* */
+
 router
   .route("/:id")
   .get(usersController.verifyCredit, usersController.getUser)

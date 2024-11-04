@@ -44,6 +44,15 @@ export interface UserDocument extends Document {
   holidays?: HolidayDocument[];
   password?: string;
   passwordConfirm?: string;
+
+  age?: number;
+  gender?: string;
+  address?: string;
+  postalCode?: string;
+  maritalStatus?: string;
+  homePhone?: string;
+  mobilePhone?: string;
+
   correctPassword(candidatePassword: string, userPassword: string): boolean;
 }
 
@@ -137,6 +146,35 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
+
+    age: {
+      type: Number,
+      // required: [true, "Por favor proporcione su edad"]
+    },
+    gender: {
+      type: String,
+      // required: [true, "Por favor seleccione su sexo"]
+    },
+    address: {
+      type: String,
+      // required: [true, "Por favor proporcione su domicilio"],
+    },
+    postalCode: {
+      type: String,
+      // required: [true, "Por favor proporcione su código postal"],
+    },
+    maritalStatus: {
+      type: String,
+      // required: [true, "Por favor proporcione su estado civil"],
+    },
+    homePhone: {
+      type: String,
+      // required: [true, "Por favor proporcione su teléfono particular"],
+    },
+    mobilePhone: {
+      type: String,
+      // required: [true, "Por favor proporcione su celular"],
+    },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
@@ -171,10 +209,6 @@ userSchema.pre<Query<any, any>>(/^find/, function (next) {
   });
 
   next();
-});
-
-userSchema.pre("find", async function name(next) {
-  // console.log("*");
 });
 
 // VALIDATION SET SENIORITY

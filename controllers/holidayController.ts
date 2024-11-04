@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Holiday from "../models/holidayModel";
+import Holiday, { HolidayDocument } from "../models/holidayModel";
 
 import {
   createOne,
@@ -8,7 +8,7 @@ import {
   getOne,
   updateOne,
 } from "./handleFactory";
-import User from "../models/userModel";
+import User, { UserDocument } from "../models/userModel";
 
 export const getHoliday = getOne(Holiday);
 export const deleteHoliday = deleteOne(Holiday);
@@ -40,21 +40,57 @@ export const getAllHoliday = async (
   }
 };
 
+const computeCreditUser = async (
+  holiday: HolidayDocument,
+  user: UserDocument
+) => {
+  const numberOfDays = holiday.days.length;
+
+  let credit;
+
+  switch (holiday.period) {
+    case "future":
+      credit = user?.creditFuture?.balance || 0;
+      break;
+    case "past":
+      credit = user?.creditPast?.balance || 0;
+      break;
+    default:
+      credit = user?.credit?.balance || 0;
+      break;
+  }
+
+  if (!user && credit <= numberOfDays) return;
+
+  if (holiday.period === "future" && user.creditFuture) {
+    user.creditFuture.balance = credit - numberOfDays;
+  } else if (holiday.period === "past" && user.creditPast) {
+    user.creditPast.balance = credit - numberOfDays;
+  } else if (user.credit) {
+    user.credit.balance = credit - numberOfDays;
+  }
+
+  await user.save({ validateBeforeSave: true });
+};
+
 export const createHoliday = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const data = await Holiday.create(req.body);
+    const holiday = await Holiday.create(req.body);
 
-    if (!data) {
-      throw new Error("Data don't exitst");
+    if (!holiday) {
+      throw new Error("holiday don't exitst");
     }
+    // 1) Cumpute credit.
+    const user = await User.findById(holiday.user);
+    if (user) await computeCreditUser(holiday, user);
 
     res.status(200).json({
       status: "success",
-      data,
+      holiday,
     });
   } catch (err) {
     next(err);
@@ -72,51 +108,68 @@ export const updateHoliday = async (
       runValidators: true,
     });
 
-    if (!holiday) {
-      throw new Error("Holiday doesn't exist");
-    }
+    if (!holiday) throw new Error("Holiday doesn't exist");
 
-    if (
-      holiday.authorizationAdmin === "approved" &&
-      holiday.authorizationManager === "approved"
-    ) {
-      const user = await User.findById(holiday.user.id);
+    const {
+      authorizationAdmin,
+      authorizationManager,
+      period,
+      days,
+      user: userRef,
+    } = holiday;
+    const isApproved =
+      authorizationAdmin === "approved" && authorizationManager === "approved";
+    const isRejected =
+      authorizationAdmin === "rejected" || authorizationManager === "rejected";
 
-      const numberOfDays = holiday.days.length;
-      let credit;
+    if (isApproved || isRejected) {
+      const user = await User.findById(userRef.id);
+      if (!user) throw new Error("User not found");
 
-      switch (holiday.period) {
-        case "future":
-          credit = user?.creditFuture?.balance || 0;
-          break;
-        case "past":
-          credit = user?.creditPast?.balance || 0;
-          break;
-        default:
-          credit = user?.credit?.balance || 0;
-          break;
-      }
+      const numberOfDays = days.length;
+      const credit =
+        period === "future"
+          ? user.creditFuture?.balance
+          : period === "past"
+          ? user.creditPast?.balance
+          : user.credit?.balance || 0;
 
-      if (
-        user &&
-        user.credit &&
-        user.creditFuture &&
-        user.creditPast &&
-        credit >= numberOfDays
-      ) {
-        if (holiday.period === "future")
-          user.creditFuture.balance = credit - numberOfDays;
-        else if (holiday.period === "past")
-          user.creditPast.balance = credit - numberOfDays;
-        else user.credit.balance = credit - numberOfDays;
+      if (credit && isApproved && credit >= numberOfDays) {
+        // Restar días de crédito cuando la solicitud es aprobada
+        switch (period) {
+          case "future":
+            if (user.creditFuture)
+              user.creditFuture.balance = (credit ?? 0) - numberOfDays;
+            break;
+          case "past":
+            if (user.creditPast)
+              user.creditPast.balance = (credit ?? 0) - numberOfDays;
+            break;
+          default:
+            if (user.credit) user.credit.balance = (credit ?? 0) - numberOfDays;
+            break;
+        }
+        await user.save({ validateBeforeSave: true });
+      } else if (isRejected) {
+        // Devolver días de crédito cuando la solicitud es rechazada
+        switch (period) {
+          case "future":
+            if (user.creditFuture)
+              user.creditFuture.balance = (credit ?? 0) + numberOfDays;
+            break;
+          case "past":
+            if (user.creditPast)
+              user.creditPast.balance = (credit ?? 0) + numberOfDays;
+            break;
+          default:
+            if (user.credit) user.credit.balance = (credit ?? 0) + numberOfDays;
+            break;
+        }
         await user.save({ validateBeforeSave: true });
       }
     }
 
-    res.status(200).json({
-      status: "success",
-      holiday,
-    });
+    res.status(200).json({ status: "success", holiday });
   } catch (err) {
     next(err);
   }
