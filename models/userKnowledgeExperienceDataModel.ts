@@ -68,7 +68,7 @@ const knowledgeExperienceDataSchema =
 
 const UserKnowledgeExperienceData: Model<KnowledgeExperienceDataDocument> =
   mongoose.model<KnowledgeExperienceDataDocument>(
-    "KnowledgeExperienceData",
+    "UserKnowledgeExperienceData",
     knowledgeExperienceDataSchema
   );
 

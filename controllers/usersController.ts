@@ -18,6 +18,7 @@ import UserScholarData from "../models/userScholarDataModel";
 import UserClinicInformation from "../models/userClinicInformationDataModel";
 import UserKnowledgeExperienceData from "../models/userKnowledgeExperienceDataModel";
 import UserFamiliarData from "../models/userFamiliarDataModel";
+import UserPersonalReference from "../models/userPersonalReferenceDataModel";
 
 const multerStorage = multer.memoryStorage();
 
@@ -435,6 +436,52 @@ export const updateClinicInformation = catchAsync(
 
     if (!data) {
       throw new Error("La información no existe");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+//PERSONAL REFERENCE
+export const createPersonalReference = createOne(UserPersonalReference);
+export const getPersonalReference = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by user id
+    const personalReference = await UserPersonalReference.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!personalReference)
+      throw new AppError(
+        `No se encontró ningún documento con id: ${req.params.id}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: personalReference,
+    });
+  }
+);
+
+export const updatePersonalReference = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserPersonalReference.findOneAndUpdate(
+      { user: req.params.id }, // Actualiza el documento basado en el usuario
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("La referencia personal no existe");
     }
 
     res.status(200).json({

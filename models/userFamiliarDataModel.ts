@@ -43,6 +43,7 @@ interface FamiliarDataDocument extends Document {
     ocupation: string;
     address: string;
   };
+  user: mongoose.Types.ObjectId;
 }
 
 const familiarDataSchema = new Schema<FamiliarDataDocument>(
@@ -89,11 +90,19 @@ const familiarDataSchema = new Schema<FamiliarDataDocument>(
       ocupation: { type: String, required: true },
       address: { type: String, required: true },
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [
+        true,
+        "Los datos familiares deben estar asociados a un usuario",
+      ],
+    },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 const UserFamiliarData: Model<FamiliarDataDocument> =
-  mongoose.model<FamiliarDataDocument>("FamiliarData", familiarDataSchema);
+  mongoose.model<FamiliarDataDocument>("UserFamiliarData", familiarDataSchema);
 
 export default UserFamiliarData;
