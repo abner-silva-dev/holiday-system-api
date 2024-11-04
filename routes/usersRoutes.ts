@@ -53,6 +53,14 @@ router
   .get(usersController.getClinicInformation)
   .patch(usersController.updateClinicInformation);
 
+  // PERSONAL REFERENCE
+  router
+  .route("/:id/personalReference")
+  .post(usersController.createPersonalReference)
+  .get(usersController.getPersonalReference)
+  .patch(usersController.updatePersonalReference);
+
+
 /******************************************************* */
 
 router
