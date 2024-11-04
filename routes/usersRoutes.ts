@@ -31,6 +31,19 @@ router
     usersController.sendResponse
   );
 
+/* ROUTE REQUEST */
+
+router
+  .route("/:id/complementaryData")
+  .post(usersController.createComplementaryData);
+
+router
+  .route("/:id/complementaryData/:idRequest")
+  .get(usersController.getComplementaryData)
+  .patch(usersController.updateComplementaryData);
+
+/******************************************************* */
+
 router
   .route("/:id")
   .get(usersController.verifyCredit, usersController.getUser)
