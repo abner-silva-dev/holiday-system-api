@@ -32,12 +32,47 @@ router
   );
 
 /* ROUTE REQUEST */
-
+// COMPLEMENTARY DATA
 router
   .route("/:id/complementaryData")
   .post(usersController.createComplementaryData)
   .get(usersController.getComplementaryData)
   .patch(usersController.updateComplementaryData);
+
+// SCHOLAR DATA
+router
+  .route("/:id/scholarData")
+  .post(usersController.createScholarData)
+  .get(usersController.getScholarData)
+  .patch(usersController.updateScholarData);
+
+//KNOWLEDGE AND EXPERIENCE
+router
+  .route("/:id/knowledgeExperience")
+  .post(usersController.createKnowledgeExperienceData)
+  .get(usersController.getKnowledgeExperienceData)
+  .patch(usersController.updateKnowledgeExperienceData);
+
+//FAMILIAR DATA
+router
+  .route("/:id/familiarData")
+  .post(usersController.createFamiliarData)
+  .get(usersController.getFamiliarData)
+  .patch(usersController.updateFamiliarData);
+
+// CLINIC INFORMATION
+router
+  .route("/:id/clinicInformation")
+  .post(usersController.createClinicInformation)
+  .get(usersController.getClinicInformation)
+  .patch(usersController.updateClinicInformation);
+
+// PERSONAL REFERENCE
+router
+  .route("/:id/personalReference")
+  .post(usersController.createPersonalReference)
+  .get(usersController.getPersonalReference)
+  .patch(usersController.updatePersonalReference);
 
 /******************************************************* */
 

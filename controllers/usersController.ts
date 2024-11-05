@@ -14,6 +14,11 @@ import catchAsync from "../utils/catchAsync";
 
 import UserComplementaryData from "../models/userComplementaryDataModel";
 import User from "../models/userModel";
+import UserScholarData from "../models/userScholarDataModel";
+import UserClinicInformation from "../models/userClinicInformationDataModel";
+import UserKnowledgeExperienceData from "../models/userKnowledgeExperienceDataModel";
+import UserFamiliarData from "../models/userFamiliarDataModel";
+import UserPersonalReference from "../models/userPersonalReferenceDataModel";
 
 const multerStorage = multer.memoryStorage();
 
@@ -214,10 +219,10 @@ export const sendResponse = catchAsync(
   }
 );
 
+/* ********************************************************************************* */
 /* REQUEST CONTROLLERS */
-
+// COMPLEMENTARY DATA
 export const createComplementaryData = createOne(UserComplementaryData);
-
 export const getComplementaryData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // Searching document by id
@@ -258,6 +263,233 @@ export const updateComplementaryData = catchAsync(
 
     if (!data) {
       throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+// SCHOLAR DATA
+export const createScholarData = createOne(UserScholarData);
+export const getScholarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const scholarData = await UserScholarData.findOne({ user: req.params.id });
+
+    // Handle errors
+    if (!scholarData)
+      throw new AppError(
+        `No se encontro ningun documento con id: ${req.params.idRequest}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: scholarData,
+    });
+  }
+);
+export const updateScholarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserComplementaryData.findByIdAndUpdate(
+      req.params.idRequest,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+// KNOWLEDGE AND EXPERIENCE DATA
+export const createKnowledgeExperienceData = createOne(
+  UserKnowledgeExperienceData
+);
+export const getKnowledgeExperienceData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const knowledgeExperience = await UserKnowledgeExperienceData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!knowledgeExperience)
+      throw new AppError(
+        `No se encontro ningun documento con id: ${req.params.idRequest}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: knowledgeExperience,
+    });
+  }
+);
+export const updateKnowledgeExperienceData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserComplementaryData.findByIdAndUpdate(
+      req.params.idRequest,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+// FAMILIAR DATA
+export const createFamiliarData = createOne(UserFamiliarData);
+export const getFamiliarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const familiarData = await UserFamiliarData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!familiarData)
+      throw new AppError(
+        `No se encontro ningun documento con id: ${req.params.idRequest}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: familiarData,
+    });
+  }
+);
+export const updateFamiliarData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserComplementaryData.findByIdAndUpdate(
+      req.params.idRequest,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+//CLINIC INFORMATION
+export const createClinicInformation = createOne(UserClinicInformation);
+export const getClinicInformation = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const clinicInformation = await UserClinicInformation.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!clinicInformation)
+      throw new AppError(
+        `No se encontró ningún documento con id: ${req.params.clinicInfoId}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: clinicInformation,
+    });
+  }
+);
+
+export const updateClinicInformation = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserClinicInformation.findByIdAndUpdate(
+      req.params.clinicInfoId,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("La información no existe");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+//PERSONAL REFERENCE
+export const createPersonalReference = createOne(UserPersonalReference);
+export const getPersonalReference = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by user id
+    const personalReference = await UserPersonalReference.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!personalReference)
+      throw new AppError(
+        `No se encontró ningún documento con id: ${req.params.id}`,
+        404
+      );
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: personalReference,
+    });
+  }
+);
+
+export const updatePersonalReference = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await UserPersonalReference.findOneAndUpdate(
+      { user: req.params.id }, // Actualiza el documento basado en el usuario
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("La referencia personal no existe");
     }
 
     res.status(200).json({
