@@ -239,8 +239,16 @@ export const getComplementaryData = catchAsync(
 
 export const updateComplementaryData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const complementaryData = await UserComplementaryData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!complementaryData)
+      throw new AppError(`No se encontro ningun documento`, 404);
+
     const data = await UserComplementaryData.findByIdAndUpdate(
-      req.params.idRequest,
+      complementaryData._id,
       req.body,
       {
         new: true,
