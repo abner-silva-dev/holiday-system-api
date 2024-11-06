@@ -54,34 +54,35 @@ const scholarDataSchema = new Schema<ScholarDataDocument>(
     },
     // High School
     highSchool: {
-      yearsCoursed: { type: Number, required: true },
-      schoolName: { type: String, required: true },
-      startDate: { type: String, required: true },
-      endDate: { type: String, required: true },
-      hasCertificate: { type: String, enum: ["si", "no"], required: true },
+      yearsCoursed: { type: Number, required: false },
+      schoolName: { type: String, required: false },
+      startDate: { type: String, required: false },
+      endDate: { type: String, required: false },
+      hasCertificate: { type: String, enum: ["si", "no"], required: false },
     },
     // University
     university: {
-      yearsCoursed: { type: Number, required: true },
-      schoolName: { type: String, required: true },
-      startDate: { type: String, required: true },
-      endDate: { type: String, required: true },
-      hasCertificate: { type: String, enum: ["si", "no"], required: true },
+      yearsCoursed: { type: Number, required: false },
+      schoolName: { type: String, required: false },
+      startDate: { type: String, required: false },
+      endDate: { type: String, required: false },
+      hasCertificate: { type: String, enum: ["si", "no"], required: false },
     },
     // Degree
     degree: {
-      yearsCoursed: { type: Number, required: true },
-      schoolName: { type: String, required: true },
-      startDate: { type: String, required: true },
-      endDate: { type: String, required: true },
-      hasCertificate: { type: String, enum: ["si", "no"], required: true },
-      career: { type: String, required: true },
+      yearsCoursed: { type: Number, required: false },
+      schoolName: { type: String, required: false },
+      startDate: { type: String, required: false },
+      endDate: { type: String, required: false },
+      hasCertificate: { type: String, enum: ["si", "no"], required: false },
+      career: { type: String, required: false },
     },
+
     // Current Studies
-    currentStudying: { type: String, enum: ["si", "no"], required: true },
-    currentStudySchedule: { type: String, required: true },
-    currentStudyName: { type: String, required: true },
-    currentSchool: { type: String, required: true },
+    currentStudying: { type: String, enum: ["si", "no"], required: false },
+    currentStudySchedule: { type: String, required: false },
+    currentStudyName: { type: String, required: false },
+    currentSchool: { type: String, required: false },
 
     // Reference to User
     user: {
