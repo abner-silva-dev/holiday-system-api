@@ -27,14 +27,14 @@ const knowledgeExperienceDataSchema =
     {
       // English Language Proficiency
       english: {
-        speakingPer: { type: Number, required: true, min: 0, max: 100 },
-        writtingPer: { type: Number, required: true, min: 0, max: 100 },
+        speakingPer: { type: Number, required: false, min: 0, max: 100 },
+        writtingPer: { type: Number, required: false, min: 0, max: 100 },
       },
       // Second Language Proficiency
       secondLanguage: {
-        language: { type: String, required: true },
-        speakingPer: { type: Number, required: true, min: 0, max: 100 },
-        writtingPer: { type: Number, required: true, min: 0, max: 100 },
+        language: { type: String, required: false },
+        speakingPer: { type: Number, required: false, min: 0, max: 100 },
+        writtingPer: { type: Number, required: false, min: 0, max: 100 },
       },
       // Experience Areas
       areas: {
