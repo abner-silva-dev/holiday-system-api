@@ -295,8 +295,16 @@ export const getScholarData = catchAsync(
 );
 export const updateScholarData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await UserComplementaryData.findByIdAndUpdate(
-      req.params.idRequest,
+    const scholarData = await UserScholarData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!scholarData)
+      throw new AppError(`No se encontro ningun documento`, 404);
+
+    const data = await UserScholarData.findByIdAndUpdate(
+      scholarData._id,
       req.body,
       {
         new: true,
@@ -342,8 +350,16 @@ export const getKnowledgeExperienceData = catchAsync(
 );
 export const updateKnowledgeExperienceData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await UserComplementaryData.findByIdAndUpdate(
-      req.params.idRequest,
+    const knowledgeExperience = await UserKnowledgeExperienceData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!knowledgeExperience)
+      throw new AppError(`No se encontro ningun documento`, 404);
+
+    const data = await UserKnowledgeExperienceData.findByIdAndUpdate(
+      knowledgeExperience._id,
       req.body,
       {
         new: true,
@@ -385,10 +401,19 @@ export const getFamiliarData = catchAsync(
     });
   }
 );
+
 export const updateFamiliarData = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await UserComplementaryData.findByIdAndUpdate(
-      req.params.idRequest,
+    const familiarData = await UserFamiliarData.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!familiarData)
+      throw new AppError(`No se encontro ningun documento`, 404);
+
+    const data = await UserFamiliarData.findByIdAndUpdate(
+      familiarData._id,
       req.body,
       {
         new: true,
@@ -433,8 +458,16 @@ export const getClinicInformation = catchAsync(
 
 export const updateClinicInformation = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const clinicInformation = await UserClinicInformation.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!clinicInformation)
+      throw new AppError(`No se encontro ningun documento`, 404);
+
     const data = await UserClinicInformation.findByIdAndUpdate(
-      req.params.clinicInfoId,
+      clinicInformation._id,
       req.body,
       {
         new: true,
@@ -443,7 +476,7 @@ export const updateClinicInformation = catchAsync(
     );
 
     if (!data) {
-      throw new Error("La información no existe");
+      throw new Error("Data don't exitst");
     }
 
     res.status(200).json({
@@ -479,8 +512,16 @@ export const getPersonalReference = catchAsync(
 
 export const updatePersonalReference = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await UserPersonalReference.findOneAndUpdate(
-      { user: req.params.id }, // Actualiza el documento basado en el usuario
+    const personalReference = await UserPersonalReference.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!personalReference)
+      throw new AppError(`No se encontro ningun documento`, 404);
+
+    const data = await UserPersonalReference.findByIdAndUpdate(
+      personalReference._id,
       req.body,
       {
         new: true,
@@ -489,7 +530,7 @@ export const updatePersonalReference = catchAsync(
     );
 
     if (!data) {
-      throw new Error("La referencia personal no existe");
+      throw new Error("Data don't exitst");
     }
 
     res.status(200).json({
