@@ -19,6 +19,7 @@ import UserClinicInformation from "../models/userClinicInformationDataModel";
 import UserKnowledgeExperienceData from "../models/userKnowledgeExperienceDataModel";
 import UserFamiliarData from "../models/userFamiliarDataModel";
 import UserPersonalReference from "../models/userPersonalReferenceDataModel";
+import UserEmploy from "../models/userEmployModel";
 
 const multerStorage = multer.memoryStorage();
 
@@ -254,6 +255,56 @@ export const updateComplementaryData = catchAsync(
 
     const data = await UserComplementaryData.findByIdAndUpdate(
       complementaryData._id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  }
+);
+
+// EMPLOY DATA
+export const createEmployData = createOne(UserEmploy);
+export const getEmployData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Searching document by id
+    const employData = await UserEmploy.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!employData) throw new AppError(`No se encontro ningun documento`, 404);
+
+    // Send data to client
+    res.status(200).json({
+      status: "success",
+      data: employData,
+    });
+  }
+);
+
+export const updateEmployData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userEmployData = await UserEmploy.findOne({
+      user: req.params.id,
+    });
+
+    // Handle errors
+    if (!userEmployData)
+      throw new AppError(`No se encontro ningun documento`, 404);
+
+    const data = await UserEmploy.findByIdAndUpdate(
+      userEmployData._id,
       req.body,
       {
         new: true,

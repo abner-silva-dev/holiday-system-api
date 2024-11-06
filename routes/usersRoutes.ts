@@ -39,6 +39,13 @@ router
   .get(usersController.getComplementaryData)
   .patch(usersController.updateComplementaryData);
 
+// EMPLOY DATA
+router
+  .route("/:id/employData")
+  .post(usersController.createEmployData)
+  .get(usersController.getEmployData)
+  .patch(usersController.updateEmployData);
+
 // SCHOLAR DATA
 router
   .route("/:id/scholarData")
