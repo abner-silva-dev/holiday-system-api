@@ -1,6 +1,7 @@
 import express from "express";
 import * as usersController from "./../controllers/usersController";
 import * as authController from "./../controllers/authController";
+import * as archiveCotroller from "./../controllers/archiveController";
 
 const router = express.Router();
 
@@ -30,7 +31,23 @@ router
     usersController.resizeUserPhoto,
     usersController.sendResponse
   );
+/********************************************************/
+/* ROUTE ARCHIVE*/
+router
+  .route("/:id/archive")
+  .get(archiveCotroller.getArchive)
+  .post(
+    archiveCotroller.uploadFields,
+    archiveCotroller.saveArchivePDF,
+    archiveCotroller.createArchive
+  )
+  .patch(
+    archiveCotroller.uploadFields,
+    archiveCotroller.saveArchivePDF,
+    archiveCotroller.updateArchive
+  );
 
+/********************************************************/
 /* ROUTE REQUEST */
 // COMPLEMENTARY DATA
 router
