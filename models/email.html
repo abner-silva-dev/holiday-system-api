@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 20.5%;
+      }
+
+      body {
+        font-size: 1.6rem;
+        font-family: sans-serif;
+        background-color: #f1f3f5;
+        /* background: linear-gradient(#ebfbee, #ffa8a8); */
+        background-repeat: no-repeat;
+        height: 100vh;
+
+        /* layout */
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      /********************************************/
+      /* HEADER */
+      /********************************************/
+
+      .header {
+        background: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.4),
+            rgba(0, 0, 0, 0.4)
+          ),
+          url("http://localhost:9000/background-email.jpg");
+
+        background-size: cover;
+        background-position: 50% 20%;
+        height: 20rem;
+
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .logo {
+        width: 16rem;
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.459));
+      }
+      .heading-main {
+        color: #fff;
+        font-style: italic;
+        font-size: 3rem;
+        font-weight: 200;
+        text-align: center;
+      }
+
+      /********************************************/
+      /* MAIN CONTENT */
+      /********************************************/
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        /* height: 100%; */
+
+        gap: 4rem;
+
+        padding: 2rem 4rem;
+        text-align: center;
+      }
+
+      .welcome {
+        p {
+          display: inline-block;
+          font-size: 2rem;
+          font-weight: 700;
+          color: #fff;
+          background: linear-gradient(to right, #5c7cfa, #f06595);
+          padding: 2rem 4rem;
+          border-radius: 11px;
+        }
+      }
+
+      .btn {
+        text-transform: uppercase;
+        font-size: 1.6rem;
+        font-weight: 600;
+        background-color: #099268;
+        color: #fff;
+        padding: 1.5rem 2rem;
+        border-radius: 11px;
+
+        transition: all 0.2s ease-in;
+
+        &:hover {
+          background-color: #12b886;
+        }
+
+        cursor: pointer;
+      }
+
+      .info {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      .info__title {
+        text-transform: uppercase;
+        font-size: 1.6rem;
+        font-weight: 600;
+      }
+
+      .info__text {
+        text-transform: uppercase;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #1864ab;
+      }
+
+      .content {
+        flex: 1 0 auto;
+      }
+
+      .advertence__text {
+        color: #495057;
+        font-size: 2rem;
+        font-style: italic;
+        font-weight: 500;
+      }
+
+      /********************************************/
+      /* FOOTER */
+      /********************************************/
+
+      .footer {
+        background-color: #212529;
+        color: #fff;
+        padding: 2rem 4rem;
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .foter__logo {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .logo--mini {
+        width: 10rem;
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.459));
+      }
+      .logo__text {
+        font-size: 1.4rem;
+      }
+
+      .footer-info {
+        display: flex;
+        gap: 2rem;
+        text-align: center;
+      }
+
+      .footer__group {
+        display: flex;
+        flex-direction: column;
+
+        p {
+          font-size: 1.6rem;
+        }
+        a {
+          color: #dbe4ff;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <img
+        src="http://localhost:9000/logo-dai.png"
+        alt="Logo dai"
+        class="logo"
+      />
+      <h1 class="heading-main">¡ Tu Soporte en el Camino !</h1>
+    </header>
+    <main class="main">
+      <div class="welcome">
+        <p>🎈🎉Bienvenido @NAME@ ya eres parte de la familia DAI🥳🎉</p>
+      </div>
+
+      <div class="info">
+        <div>
+          <p class="info__title">Su contraseña es:</p>
+          <span class="info__text">@PASSWORD@</span>
+        </div>
+
+        <a class="btn">Ingresar al sitema</a>
+      </div>
+
+      <div class="advertence">
+        <p class="advertence__text">
+          ⚠️ Por tu seguridad, nunca compartas tu contraseña con nadie. Es
+          información personal y confidencial que protege tu cuenta. Mantenerla
+          privada es clave para evitar accesos no autorizados
+        </p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="foter__logo">
+        <img
+          src="http://localhost:9000/logo-dai.png"
+          alt="Logo dai"
+          class="logo--mini"
+        />
+        <p class="logo__text">&copy; DISTRIBUIDORA DE AUTO INDUSTRIAS (DAI)</p>
+      </div>
+      <div class="footer-info">
+        <div class="footer__group">
+          <p>Visita nuestro sitio web</p>
+          <a href="https://dai.com.mx/">Dai page</a>
+        </div>
+
+        <div class="footer__group">
+          <p>Volver a Dai System</p>
+          <a href="http://localhost:5173/login">Dai System</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

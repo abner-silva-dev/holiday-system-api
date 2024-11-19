@@ -19,7 +19,7 @@ export interface UserDocument extends Document {
   paternSurname: string;
   motherSurname?: string;
   employNumber: string;
-  email: string;
+  email?: string;
   photo?: string;
   credit?: { balance: number; exp: Date };
   creditFuture?: { balance: number };
@@ -78,7 +78,6 @@ const userSchema = new Schema(
     email: {
       type: String,
       requiered: [true, "Por favor proporcione un correo electronico"],
-      unique: true,
     },
     daysGrantedBySeniority: {
       startDate: Date,

@@ -9,6 +9,7 @@ import usersRoutes from "../routes/usersRoutes";
 import seniorityRoutes from "../routes/seniorityRoutes";
 import AppError from "../utils/appError";
 import { globalErrorHandler } from "./../controllers/errorController";
+import Email from "../utils/email";
 
 class Server {
   private app: Application;
@@ -64,6 +65,18 @@ class Server {
     this.app.use("/api/v1/enterprise", enterpriseRoutes);
     this.app.use("/api/v1/seniority", seniorityRoutes);
     this.app.use("/api/v1/users", usersRoutes);
+
+    this.app.use("/api/v1/email/:email", async (req, res, next) => {
+      const email = req.params.email;
+      const url = `${req.protocol}://${req.get("host")}/`;
+
+      await new Email({ name: "abner", email }, url).send(
+        "<h1>password</h1>",
+        "como estas este es el servidor de DAI"
+      );
+
+      res.end("EMAIL SEND");
+    });
 
     this.app.all("*", (req, _, next) => {
       next(new AppError(`can't find ${req.originalUrl} on this server!`, 404));

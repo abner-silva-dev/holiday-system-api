@@ -29,6 +29,7 @@ router
     usersController.uploadUserPhoto,
     usersController.createUser,
     usersController.resizeUserPhoto,
+    authController.signup,
     usersController.sendResponse
   );
 /********************************************************/

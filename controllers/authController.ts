@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import AppError from "../utils/appError";
 import User, { UserDocument } from "../models/userModel";
 import jwt from "jsonwebtoken";
-import { promisify } from "util";
+import catchAsync from "../utils/catchAsync";
+import Email from "../utils/email";
+import { randomBytes } from "crypto";
 
 const signToken = (id: string) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -44,6 +46,33 @@ const createSendToken = (
 
   res.status(statusCode).json(resObjectJSON);
 };
+
+function generatePassword(length = 16) {
+  return randomBytes(length).toString("hex");
+}
+
+export const signup = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    let user = req.user;
+
+    if (!user) return next();
+
+    const password = generatePassword(5);
+
+    user = await User.findByIdAndUpdate(
+      req.user.id,
+      { password },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    await new Email(user).sendPassword({ password });
+
+    next();
+  }
+);
 
 export const login = async (
   req: Request,

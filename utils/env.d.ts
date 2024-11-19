@@ -5,6 +5,8 @@ declare namespace NodeJS {
     DATABASE_NAME: string;
     JWT_EXPIRES_IN: string;
     JWT_COOKIE_EXPIRES_IN: number;
+    EMAIL_FROM: string;
+    EMAIL_PASSWORD: string;
     NODE_ENV: string;
   }
 }
