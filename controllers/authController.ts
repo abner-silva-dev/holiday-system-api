@@ -51,13 +51,40 @@ function generatePassword(length = 16) {
   return randomBytes(length).toString("hex");
 }
 
+export const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.id;
+
+    const user = await User.findById(userId);
+
+    if (!user) return new AppError("No se encontro usuario", 404);
+
+    const passwordGenerated = generatePassword(2);
+
+    user.password = passwordGenerated;
+
+    await user.save({ validateBeforeSave: true });
+
+    await new Email({
+      email: user?.email || "",
+      name: user?.name || "",
+    }).sendPassword({
+      password: passwordGenerated,
+    });
+
+    res.status(201).json({
+      status: "sucess",
+    });
+  }
+);
+
 export const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     let user = req.user;
 
     if (!user) return next();
 
-    const password = generatePassword(5);
+    const password = generatePassword(2);
 
     user = await User.findByIdAndUpdate(
       req.user.id,

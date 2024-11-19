@@ -32,8 +32,17 @@ router
     authController.signup,
     usersController.sendResponse
   );
+
 /********************************************************/
-/* ROUTE ARCHIVE*/
+/* ROUTE RESET PASSWORD */
+router.get(
+  "/:id/resetPassword",
+  authController.restrictTo("admin"),
+  authController.resetPassword
+);
+
+/********************************************************/
+/* ROUTE ARCHIVE */
 router
   .route("/:id/archive")
   .get(archiveCotroller.getArchive)

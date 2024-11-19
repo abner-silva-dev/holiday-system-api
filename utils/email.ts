@@ -27,7 +27,7 @@ const SendKEYSHTML = `
           <div style="display: inline-block; margin-bottom: 2rem;">
             <div>
               <p style="text-transform: uppercase; font-size: 1.2rem; font-weight: 600;">Su contraseña es:</p>
-              <span style="text-transform: uppercase; font-size: 1.2rem; font-weight: 600; color: #1864ab;">@PASSWORD@</span>
+              <span style="font-size: 1.2rem; font-weight: 600; color: #1864ab;">@PASSWORD@</span>
             </div>
 
             <a href="#" style="text-transform: uppercase; font-size: 1.2rem; font-weight: 600; background-color: #099268; color: #fff; padding: 1rem 2rem; border-radius: 11px; text-decoration: none; display: inline-block; margin-top: 1.5rem;">Ingresar al sistema</a>
