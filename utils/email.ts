@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import { PassThrough } from "stream";
 
 type User = { email: string; name: string };
 

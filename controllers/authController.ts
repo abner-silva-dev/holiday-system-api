@@ -52,6 +52,10 @@ function generatePassword(length = 16) {
 }
 
 export const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {}
+);
+
+export const resetPasswordAuto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
 

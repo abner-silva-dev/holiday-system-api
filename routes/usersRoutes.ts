@@ -2,6 +2,7 @@ import express from "express";
 import * as usersController from "./../controllers/usersController";
 import * as authController from "./../controllers/authController";
 import * as archiveCotroller from "./../controllers/archiveController";
+import * as docDowloadController from "./../controllers/docDowloadController.ts";
 
 const router = express.Router();
 
@@ -32,14 +33,16 @@ router
     authController.signup,
     usersController.sendResponse
   );
+/********************************************************/
+/* ROUTE GENERATE DOCUMENTS*/
+router.route("/:id/dowloadDoc").get(docDowloadController.getDocument);
 
 /********************************************************/
 /* ROUTE RESET PASSWORD */
-router.get(
-  "/:id/resetPassword",
-  authController.restrictTo("admin"),
-  authController.resetPassword
-);
+router
+  .route("/:id/resetPassword")
+  .get(authController.restrictTo("admin"), authController.resetPasswordAuto)
+  .post(authController.restrictTo("admin"), authController.resetPassword);
 
 /********************************************************/
 /* ROUTE ARCHIVE */
