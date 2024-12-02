@@ -69,7 +69,7 @@ export const resetPasswordAuto = catchAsync(
 
     await user.save({ validateBeforeSave: true });
 
-    await new Email({
+    new Email({
       email: user?.email || "",
       name: user?.name || "",
     }).sendPassword({
@@ -99,7 +99,7 @@ export const signup = catchAsync(
       }
     );
 
-    await new Email(user).sendPassword({ password });
+    new Email(user).sendPassword({ password });
 
     next();
   }
@@ -136,6 +136,35 @@ export const login = async (
     next(error);
   }
 };
+
+export const validateUserPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { password } = req.body;
+
+    // Check if the password is provided
+    if (!password) {
+      return next(
+        new AppError("Por favor, proporcione una contraseña válida.", 400)
+      );
+    }
+
+    // Find the user by ID and include the password field
+    const user = await User.findById(req.user.id).select("+password");
+
+    // Verify if the user exists and if the password is correct
+    const isPasswordCorrect =
+      user && user.correctPassword(password, user.password || "");
+
+    if (!isPasswordCorrect) {
+      return next(
+        new AppError("Contraseña incorrecta o usuario no encontrado.", 401)
+      );
+    }
+
+    // If all checks pass, proceed to the next middleware
+    next();
+  }
+);
 
 export const logout = (req: Request, res: Response) => {
   res.cookie("jwt", "loggedout", {
@@ -211,7 +240,7 @@ export const restrictTo = (...roles: ("user" | "admin" | "manager")[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role))
       return next(
-        new AppError("You do not have permission to perfom this action", 401)
+        new AppError("No tienes permiso para realizar esta acción.", 401)
       );
 
     next();

@@ -16,6 +16,7 @@ export interface UserDocument extends Document {
   name: string;
   role: "user" | "admin" | "manager";
   dateHiring: Date;
+  position: string;
   paternSurname: string;
   motherSurname?: string;
   employNumber: string;
@@ -62,6 +63,10 @@ const userSchema = new Schema(
     paternSurname: {
       type: String,
       requiered: [true, "Por favor diganos su apellido paterno"],
+    },
+    position: {
+      type: String,
+      requiered: [true, "Por favor diganos su puesto de trabajo en DAI"],
     },
     motherSurname: { type: String },
     employNumber: {

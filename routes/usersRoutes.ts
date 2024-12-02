@@ -123,4 +123,12 @@ router
     usersController.updateUser
   );
 
+router
+  .route("/:id/role")
+  .patch(
+    authController.restrictTo("admin"),
+    authController.validateUserPassword,
+    usersController.updateUser
+  );
+
 export default router;
