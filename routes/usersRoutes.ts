@@ -128,7 +128,7 @@ router
   .patch(
     authController.restrictTo("admin"),
     authController.validateUserPassword,
-    usersController.updateUser
+    usersController.updateUserRole
   );
 
 export default router;

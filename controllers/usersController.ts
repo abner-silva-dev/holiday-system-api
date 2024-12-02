@@ -112,6 +112,36 @@ export const getAllUser = catchAsync(
 );
 
 // export const getAllUser = getAll(User, { path: "holidays" });
+
+export const updateUserRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const filteredBody = req.body.role;
+
+    if (!filteredBody) return;
+    if (req.file) filteredBody.photo = req.file.filename;
+
+    const data = await User.findByIdAndUpdate(req.params.id, filteredBody, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!data) {
+      throw new Error("Data don't exitst");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getUser = getOne(User, { path: "holidays" });
 export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
