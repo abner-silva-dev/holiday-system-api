@@ -119,10 +119,9 @@ export const updateUserRole = async (
   next: NextFunction
 ) => {
   try {
-    const filteredBody = req.body.role;
+    const filteredBody = { role: req.body.role };
 
     if (!filteredBody) return;
-    if (req.file) filteredBody.photo = req.file.filename;
 
     const data = await User.findByIdAndUpdate(req.params.id, filteredBody, {
       new: true,
