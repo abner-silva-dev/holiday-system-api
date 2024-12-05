@@ -53,8 +53,6 @@ export const getDaysAvailables = async (yearsWorked: number) => {
   }
 };
 
-type Time = -1 | 0 | 1;
-
 /**
  * Computes the start and end period based on the hiring date and a relative time value.
  *
@@ -70,6 +68,7 @@ type Time = -1 | 0 | 1;
  * // period = { startDate: Date, endDate: Date }
  * ```
  */
+type Time = -1 | 0 | 1;
 
 export const calculatedPeriod = (dateHiring: Date, time: Time) => {
   const currentDate = new Date();

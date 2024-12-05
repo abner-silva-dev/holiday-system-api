@@ -7,6 +7,8 @@ import holidayRoutes from "../routes/holidayRoutes";
 import enterpriseRoutes from "../routes/enterpriseRoutes";
 import usersRoutes from "../routes/usersRoutes";
 import seniorityRoutes from "../routes/seniorityRoutes";
+import bossRoutes from "../routes/bossRoutes";
+
 import AppError from "../utils/appError";
 import { globalErrorHandler } from "./../controllers/errorController";
 import Email from "../utils/email";
@@ -65,6 +67,7 @@ class Server {
     this.app.use("/api/v1/enterprise", enterpriseRoutes);
     this.app.use("/api/v1/seniority", seniorityRoutes);
     this.app.use("/api/v1/users", usersRoutes);
+    this.app.use("/api/v1/boss", bossRoutes);
 
     this.app.use("/api/v1/email/:email", async (req, res, next) => {
       const email = req.params.email;
