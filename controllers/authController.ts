@@ -52,7 +52,28 @@ function generatePassword(length = 16) {
 }
 
 export const resetPassword = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { newPassword, confirmNewPassword } = req.body;
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) throw new AppError("No se encontro al usuario", 404);
+
+    console.log(newPassword, confirmNewPassword);
+    if (newPassword !== confirmNewPassword)
+      throw new AppError(
+        "Las contraseñas no coinciden por favor intener de nuevo",
+        400
+      );
+
+    user.password = newPassword;
+
+    await user.save({ validateBeforeSave: true });
+
+    res.status(201).json({
+      status: "sucess",
+    });
+  }
 );
 
 export const resetPasswordAuto = catchAsync(

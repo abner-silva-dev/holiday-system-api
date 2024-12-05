@@ -39,10 +39,14 @@ router.route("/:id/dowloadDoc").get(docDowloadController.getDocument);
 
 /********************************************************/
 /* ROUTE RESET PASSWORD */
+
+router
+  .route("/resetPassword")
+  .post(authController.validateUserPassword, authController.resetPassword);
+
 router
   .route("/:id/resetPassword")
-  .get(authController.restrictTo("admin"), authController.resetPasswordAuto)
-  .post(authController.restrictTo("admin"), authController.resetPassword);
+  .get(authController.restrictTo("admin"), authController.resetPasswordAuto);
 
 /********************************************************/
 /* ROUTE ARCHIVE */
