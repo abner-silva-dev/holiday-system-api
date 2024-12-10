@@ -4,19 +4,19 @@ import Boss, { BossDocument } from "../models/bossModel";
 import AppError from "../utils/appError";
 import { deleteOne, getAll, getOne } from "./handleFactory";
 
-export const createBoss = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const boss = await Boss.create(req.body);
+// export const createBoss = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const userId = req.params.id;
 
-    if (!boss) throw new AppError("No se pudo crear el jefe", 400);
+//     // const boss = await Boss.create(req.body);
 
-    res.status(200).json({ status: "success", data: boss });
-    //   res
-    //     .status(200)
-    //     .json({ data: req.body, res: "Te estoy respondiendo desde el server" });
-    // }
-  }
-);
+//     // if (!boss) throw new AppError("No se pudo crear el jefe", 400);
+
+//     // next();
+
+//     // res.status(200).json({ status: "success", data: boss });
+//   }
+// );
 
 export const deleteBoss = deleteOne<BossDocument>(Boss);
 

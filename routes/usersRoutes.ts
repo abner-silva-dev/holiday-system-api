@@ -127,12 +127,11 @@ router
     usersController.updateUser
   );
 
-router
-  .route("/:id/role")
-  .patch(
-    authController.restrictTo("admin"),
-    authController.validateUserPassword,
-    usersController.updateUserRole
-  );
+router.route("/:id/role").patch(
+  authController.restrictTo("admin"),
+  authController.validateUserPassword,
+
+  usersController.updateUserRole
+);
 
 export default router;

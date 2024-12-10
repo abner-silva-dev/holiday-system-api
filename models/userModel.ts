@@ -54,6 +54,8 @@ export interface UserDocument extends Document {
   homePhone?: string;
   mobilePhone?: string;
 
+  directBoss?: string;
+
   correctPassword(candidatePassword: string, userPassword: string): boolean;
 }
 
@@ -188,6 +190,10 @@ userSchema.virtual("holidays", {
   foreignField: "user",
   localField: "_id",
 });
+
+// userSchema.virtual("directBoss").get(function () {
+
+// });
 
 userSchema.virtual("seniority").get(function () {
   if (!this.dateHiring) return;

@@ -20,6 +20,7 @@ import UserKnowledgeExperienceData from "../models/userKnowledgeExperienceDataMo
 import UserFamiliarData from "../models/userFamiliarDataModel";
 import UserPersonalReference from "../models/userPersonalReferenceDataModel";
 import UserEmploy from "../models/userEmployModel";
+import Boss from "../models/bossModel";
 
 const multerStorage = multer.memoryStorage();
 
@@ -130,6 +131,22 @@ export const updateUserRole = async (
 
     if (!data) {
       throw new Error("Data don't exitst");
+    }
+
+    console.log(data);
+    console.log(data.role);
+
+    if (data.role === "admin" || data.role === "manager") {
+      const boss = await Boss.find({ user: data.id });
+      if (!boss.length)
+        await Boss.create({
+          user: data.id,
+          department: data.department,
+        });
+    } else {
+      const boss = await Boss.find({ user: data.id });
+
+      if (boss.length) await Boss.findByIdAndDelete(data.id);
     }
 
     res.status(200).json({
