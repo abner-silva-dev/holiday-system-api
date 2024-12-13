@@ -9,6 +9,7 @@ import {
   computeSeniority,
   getDaysAvailables,
 } from "../controllers/seniorityController";
+import { CLIENT_RENEG_LIMIT } from "tls";
 
 const { Schema } = mongoose;
 
@@ -222,9 +223,85 @@ userSchema.pre<Query<any, any>>(/^find/, function (next) {
 });
 
 // VALIDATION SET SENIORITY
+userSchema.pre("findOneAndUpdate", async function (next) {
+  // Obtén el objeto de actualizacións
+  const query = this.getQuery();
+  const update = this.getUpdate();
+
+  const currentDoc = await this.model.findOne(query);
+
+  console.log(currentDoc);
+
+  // Verifica si `dateHiring` está presente en la actualización
+  if ((update as any).dateHiring) {
+    // Convierte `dateHiring` a un objeto Date
+    const dateHiring = new Date((update as any).dateHiring);
+
+    if (dateHiring + "" === currentDoc.dateHiring + "") return next();
+
+    if (isNaN(dateHiring.getTime())) {
+      // Asegúrate de que la conversión fue exitosa
+      return next(new Error("Invalid dateHiring"));
+    }
+
+    // Compute current years
+    const { years } = computeSeniority(dateHiring);
+
+    const daysAvailablesPast = (await getDaysAvailables(years - 1)) || 0;
+    const daysAvailables = (await getDaysAvailables(years)) || 0;
+    const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
+
+    console.log(update);
+    const currentPeriod = calculatedPeriod(dateHiring, 0);
+
+    const updatedDate = new Date(currentPeriod.endDate);
+    updatedDate.setMonth(updatedDate.getMonth() + 2);
+
+    const expirationPast = updatedDate;
+
+    // Actualiza el campo `credit` en el objeto de actualización
+    (update as any).credit = {
+      balance: daysAvailables,
+      exp: currentPeriod.endDate,
+    };
+
+    // Actualiza el campo `creditPast` en el objeto de actualización
+    (update as any).creditPast = {
+      balance: daysAvailablesPast,
+      exp: daysAvailablesPast ? expirationPast : null,
+    };
+
+    // Actualiza el campo `creditFuture` en el objeto de actualización
+    (update as any).creditFuture = {
+      balance: daysAvailablesFuture,
+    };
+
+    // Static credit
+
+    // Past
+    (update as any).daysGrantedBySeniorityPast = {
+      balance: daysAvailablesPast,
+      ...calculatedPeriod(dateHiring, -1),
+    };
+
+    // Current
+    (update as any).daysGrantedBySeniority = {
+      balance: daysAvailables,
+      ...calculatedPeriod(dateHiring, 0),
+    };
+
+    // Future
+    (update as any).daysGrantedBySeniorityFuture = {
+      balance: daysAvailablesFuture,
+      ...calculatedPeriod(dateHiring, 1),
+    };
+  }
+
+  next();
+});
+
 userSchema.pre("save", async function (next) {
   if (!this.dateHiring) return next();
-
   if (!this.isNew) return next();
 
   // Compute current years
