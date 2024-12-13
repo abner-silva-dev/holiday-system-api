@@ -89,9 +89,9 @@ export const getDocument = async (
       data = {
         path: "./contrato_confidencialidad.docx",
         data: {
-          name: `${user?.name}  ${user?.paternSurname}  ${user?.motherSurname}`,
-          address: user?.address,
-          date: getFormatCurrDate(),
+          name: `${user?.name.toUpperCase()} ${user?.paternSurname.toUpperCase()} ${user?.motherSurname?.toUpperCase()}`,
+          address: user?.address?.toUpperCase(),
+          date: getFormatCurrDate().toUpperCase(),
         },
       };
       break;
