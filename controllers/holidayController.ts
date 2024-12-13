@@ -103,6 +103,8 @@ export const updateHoliday = async (
   next: NextFunction
 ) => {
   try {
+    // console.log(holida);
+
     const holiday = await Holiday.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -135,6 +137,8 @@ export const updateHoliday = async (
           : user.credit?.balance || 0;
 
       if (credit && isApproved && credit >= numberOfDays) {
+        // if (credit && credit >= numberOfDays) {
+        console.log(period);
         // Restar días de crédito cuando la solicitud es aprobada
         switch (period) {
           case "future":

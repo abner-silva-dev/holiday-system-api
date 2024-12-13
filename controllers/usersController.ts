@@ -13,7 +13,7 @@ import {
 import catchAsync from "../utils/catchAsync";
 
 import UserComplementaryData from "../models/userComplementaryDataModel";
-import User from "../models/userModel";
+import User, { UserDocument } from "../models/userModel";
 import UserScholarData from "../models/userScholarDataModel";
 import UserClinicInformation from "../models/userClinicInformationDataModel";
 import UserKnowledgeExperienceData from "../models/userKnowledgeExperienceDataModel";
@@ -133,9 +133,6 @@ export const updateUserRole = async (
       throw new Error("Data don't exitst");
     }
 
-    console.log(data);
-    console.log(data.role);
-
     if (data.role === "admin" || data.role === "manager") {
       const boss = await Boss.find({ user: data.id });
       if (!boss.length)
@@ -161,7 +158,6 @@ export const updateUserRole = async (
 export const getUser = getOne(User, { path: "holidays" });
 export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
-// export const createUser = createOne(User);
 
 export const verifyCredit = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -171,10 +167,10 @@ export const verifyCredit = catchAsync(
     if (!user?.credit?.exp) return next();
 
     if (currentDate > user?.credit?.exp) {
-      const creditTemp = { ...user.credit };
+      const creditTemp = user.credit.balance;
       const creditFuture = {
         ...user.creditFuture,
-        balance: user.creditFuture?.balance || 0, // Ensure balance is a number
+        balance: user.creditFuture?.balance || 0,
       };
 
       const { years } = computeSeniority(user.dateHiring);
@@ -185,6 +181,9 @@ export const verifyCredit = catchAsync(
 
       const currentPeriod = calculatedPeriod(user.dateHiring, 0);
 
+      const expDatePastBalance = new Date(user.credit.exp);
+      expDatePastBalance.setMonth(expDatePastBalance.getMonth() + 2);
+
       user.credit = {
         ...creditFuture,
         exp: currentPeriod.endDate,
@@ -192,9 +191,8 @@ export const verifyCredit = catchAsync(
 
       // update past credit.
       user.creditPast = {
-        ...creditTemp,
-        exp: null,
-        balance: user.credit?.balance || 0, // Ensure balance is a number
+        exp: expDatePastBalance,
+        balance: creditTemp || 0, // Ensure balance is a number
       };
 
       user.creditFuture = {
