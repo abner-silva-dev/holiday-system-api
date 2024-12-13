@@ -167,6 +167,7 @@ export const verifyCredit = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.params.id);
     const currentDate = new Date();
+
     if (!user?.credit?.exp) return next();
 
     if (currentDate > user?.credit?.exp) {
