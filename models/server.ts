@@ -32,7 +32,11 @@ class Server {
     // ABLE CORS
     const ip = this.app.use(
       cors({
-        origin: ["http://192.168.68.76:5173", "http://localhost:5173"],
+        origin: [
+          "http://192.168.68.76:5173",
+          "http://localhost:5173",
+          "https://piapdai.netlify.app",
+        ],
 
         methods: ["GET", "POST", "PATCH", "DELETE"], // Métodos permitidos
         credentials: true, // Si necesitas enviar cookies o autenticación
