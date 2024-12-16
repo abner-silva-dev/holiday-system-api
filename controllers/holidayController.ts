@@ -103,6 +103,14 @@ export const updateHoliday = async (
   next: NextFunction
 ) => {
   try {
+    const holidayBefore = await Holiday.findById(req.params.id);
+
+    if (
+      holidayBefore?.authorizationAdmin === req.body.authorizationAdmin ||
+      holidayBefore?.authorizationManager === req.body.authorizationManager
+    )
+      return;
+
     const holiday = await Holiday.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
