@@ -123,23 +123,30 @@ export const updateHoliday = async (
       authorizationAdmin === "approved" && authorizationManager === "approved";
     const isRejected =
       authorizationAdmin === "rejected" || authorizationManager === "rejected";
+    const someApproved =
+      authorizationAdmin === "approved" || authorizationManager === "approved";
 
-    if (isApproved || isRejected) {
+    if (isApproved || isRejected || someApproved) {
       const user = await User.findById(userRef.id);
       if (!user) throw new Error("User not found");
 
       const numberOfDays = days.length;
-      const credit =
-        period === "future"
-          ? user.creditFuture?.balance
-          : period === "past"
-          ? user.creditPast?.balance
-          : user.credit?.balance || 0;
 
-      if (credit && isApproved && credit >= numberOfDays) {
-        // if (credit && credit >= numberOfDays) {
-        console.log(period);
-        // Restar días de crédito cuando la solicitud es aprobada
+      let credit;
+
+      switch (period) {
+        case "future":
+          credit = user?.creditFuture?.balance || 0;
+          break;
+        case "past":
+          credit = user?.creditPast?.balance || 0;
+          break;
+        default:
+          credit = user?.credit?.balance || 0;
+          break;
+      }
+
+      if (credit && (isApproved || someApproved) && credit >= numberOfDays) {
         switch (period) {
           case "future":
             if (user.creditFuture)
@@ -155,7 +162,6 @@ export const updateHoliday = async (
         }
         await user.save({ validateBeforeSave: true });
       } else if (isRejected) {
-        // Devolver días de crédito cuando la solicitud es rechazada
         switch (period) {
           case "future":
             if (user.creditFuture)
