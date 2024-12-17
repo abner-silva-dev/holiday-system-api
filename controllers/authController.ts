@@ -19,7 +19,7 @@ const createSendToken = (
   sendUser = false
 ) => {
   const token = signToken(user.id);
-
+  //
   res.cookie("jwt", token, {
     sameSite: "none",
     expires: new Date(
