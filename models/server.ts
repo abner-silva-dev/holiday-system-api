@@ -37,7 +37,6 @@ class Server {
           "http://localhost:5173",
           "https://piapdai.netlify.app",
         ],
-
         methods: ["GET", "POST", "PATCH", "DELETE"], // Métodos permitidos
         credentials: true, // Si necesitas enviar cookies o autenticación
       })
@@ -66,6 +65,13 @@ class Server {
     // this.app.use("/", (req, res) => {
     //   res.end("hello");
     // });
+    this.app.use((req, res, next) => {
+      console.log("******** COOKIES **********");
+      console.log(req.headers.cookie);
+      console.log("***************************");
+      next();
+    });
+
     this.app.use("/api/v1/department", departmentRoutes);
     this.app.use("/api/v1/holiday", holidayRoutes);
     this.app.use("/api/v1/enterprise", enterpriseRoutes);
