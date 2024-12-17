@@ -27,7 +27,7 @@ const createSendToken = (
     ),
     httpOnly: true,
     secure: true,
-    domain: "piapdai.netlify.app",
+    // domain: "piapdai.netlify.app",
     // secure: req.secure || req.headers["x-forwaded-proto"] === "https",
   });
 
