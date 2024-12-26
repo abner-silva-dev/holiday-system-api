@@ -195,16 +195,6 @@ export const updateHoliday = catchAsync(
       const daysBefore = holidayBefore.days.length;
       const daysAfter = days.length;
 
-      // Adjust credit based on the difference in days
-      if (daysBefore !== daysAfter) {
-        await restBalanceCredit(
-          creditBefore + daysBefore,
-          holidayBefore.period,
-          user,
-          daysAfter
-        );
-      }
-
       // Handle authorization changes
       const isApproved =
         authorizationAdmin === "approved" &&
@@ -219,10 +209,20 @@ export const updateHoliday = catchAsync(
         holidayBefore.authorizationAdmin === "rejected" ||
         holidayBefore.authorizationManager === "rejected";
 
+      // Adjust credit based on the difference in days
+      if (daysBefore !== daysAfter) {
+        await restBalanceCredit(
+          creditBefore + daysBefore,
+          holidayBefore.period,
+          user,
+          daysAfter
+        );
+      }
+
       if (someRejectedBefore)
-        await addBalanceCredit(creditAfter, period, user, daysAfter);
-      else if (someRejected)
         await restBalanceCredit(creditAfter, period, user, daysAfter);
+      else if (someRejected)
+        await addBalanceCredit(creditAfter, period, user, daysAfter);
 
       res.status(200).json({ status: "success", holiday });
     } catch (err) {
