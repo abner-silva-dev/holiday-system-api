@@ -230,8 +230,6 @@ userSchema.pre("findOneAndUpdate", async function (next) {
 
   const currentDoc = await this.model.findOne(query);
 
-  console.log(currentDoc);
-
   // Verifica si `dateHiring` está presente en la actualización
   if ((update as any).dateHiring) {
     // Convierte `dateHiring` a un objeto Date
@@ -251,7 +249,6 @@ userSchema.pre("findOneAndUpdate", async function (next) {
     const daysAvailables = (await getDaysAvailables(years)) || 0;
     const daysAvailablesFuture = (await getDaysAvailables(years + 1)) || 0;
 
-    console.log(update);
     const currentPeriod = calculatedPeriod(dateHiring, 0);
 
     const updatedDate = new Date(currentPeriod.endDate);
