@@ -175,16 +175,6 @@ export const updateHoliday = catchAsync(
         runValidators: true,
       });
 
-      const hasNewDays = holidayBefore?.days.length === req.body.days.length;
-
-      if (
-        (holidayBefore?.authorizationAdmin === req.body.authorizationAdmin &&
-          holidayBefore?.authorizationManager ===
-            req.body.authorizationManager) ||
-        !hasNewDays
-      )
-        return next(new AppError("Nothing to update", 400));
-
       if (!holiday) return next(new AppError("Holiday doesn't exist", 404));
 
       const {
@@ -195,9 +185,28 @@ export const updateHoliday = catchAsync(
         user: userRef,
       } = holiday;
 
-      let credit;
+      const user = await User.findById(userRef.id);
 
-      // CURRENT HOLIDAY STATUS
+      if (!user) return next(new AppError("User not found", 404));
+
+      const creditBefore = getCredit(holidayBefore.period, user);
+      const creditAfter = getCredit(period, user);
+
+      const daysBefore = holidayBefore.days.length;
+      const daysAfter = days.length;
+
+      // Adjust credit based on the difference in days
+      if (daysBefore !== daysAfter) {
+        await restBalanceCredit(
+          creditBefore,
+          holidayBefore.period,
+          user,
+          daysBefore
+        );
+        // await addBalanceCredit(creditAfter, period, user, daysAfter);
+      }
+
+      // Handle authorization changes
       const isApproved =
         authorizationAdmin === "approved" &&
         authorizationManager === "approved";
@@ -207,29 +216,14 @@ export const updateHoliday = catchAsync(
       const someApproved =
         authorizationAdmin === "approved" ||
         authorizationManager === "approved";
-      // PASS HOLIDAY STATUS
       const someRejectedBefore =
         holidayBefore.authorizationAdmin === "rejected" ||
         holidayBefore.authorizationManager === "rejected";
 
-      const user = await User.findById(userRef.id);
-
-      if (!user) return next(new AppError("User not found", 404));
-
-      credit = getCredit(period, user);
-
-      if (!hasNewDays) {
-        credit = credit + holidayBefore.days.length - days.length;
-      }
-
-      // 1) Accepted
-      if (someRejectedBefore) {
-        await restBalanceCredit(credit, period, user, days.length);
-      }
-      // 2) Rejected
-      if (someRejected) {
-        await addBalanceCredit(credit, period, user, days.length);
-      }
+      if (someRejectedBefore)
+        await restBalanceCredit(creditAfter, period, user, daysAfter);
+      else if (someRejected)
+        await addBalanceCredit(creditAfter, period, user, daysAfter);
 
       res.status(200).json({ status: "success", holiday });
     } catch (err) {
@@ -237,6 +231,84 @@ export const updateHoliday = catchAsync(
     }
   }
 );
+
+// export const updateHoliday = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const holidayBefore = await Holiday.findById(req.params.id);
+
+//       if (!holidayBefore)
+//         return next(new AppError("Holiday doesn't exist", 404));
+
+//       const holiday = await Holiday.findByIdAndUpdate(req.params.id, req.body, {
+//         new: true,
+//         runValidators: true,
+//       });
+
+//       const hasNotNewDays = holidayBefore?.days.length === req.body.days.length;
+
+//       if (
+//         (holidayBefore?.authorizationAdmin === req.body.authorizationAdmin &&
+//           holidayBefore?.authorizationManager ===
+//             req.body.authorizationManager) ||
+//         hasNotNewDays
+//       )
+//         return next(new AppError("Nothing to update", 400));
+
+//       if (!holiday) return next(new AppError("Holiday doesn't exist", 404));
+
+//       const {
+//         authorizationAdmin,
+//         authorizationManager,
+//         period,
+//         days,
+//         user: userRef,
+//       } = holiday;
+
+//       let credit;
+
+//       // CURRENT HOLIDAY STATUS
+//       const isApproved =
+//         authorizationAdmin === "approved" &&
+//         authorizationManager === "approved";
+//       const someRejected =
+//         authorizationAdmin === "rejected" ||
+//         authorizationManager === "rejected";
+//       const someApproved =
+//         authorizationAdmin === "approved" ||
+//         authorizationManager === "approved";
+//       // PASS HOLIDAY STATUS
+//       const someRejectedBefore =
+//         holidayBefore.authorizationAdmin === "rejected" ||
+//         holidayBefore.authorizationManager === "rejected";
+
+//       const user = await User.findById(userRef.id);
+
+//       if (!user) return next(new AppError("User not found", 404));
+
+//       credit = getCredit(period, user);
+
+//       if (!hasNotNewDays) {
+//         console.log("new holidays");
+//         credit = credit - holidayBefore.days.length + days.length;
+//         // credit = credit + holidayBefore.days.length - days.length;
+//       }
+
+//       // 1) Accepted
+//       if (someRejectedBefore) {
+//         await restBalanceCredit(credit, period, user, days.length);
+//       }
+//       // 2) Rejected
+//       if (someRejected) {
+//         await addBalanceCredit(credit, period, user, days.length);
+//       }
+
+//       res.status(200).json({ status: "success", holiday });
+//     } catch (err) {
+//       next(err);
+//     }
+//   }
+// );
 
 // export const updateHoliday = async (
 // req: Request,
