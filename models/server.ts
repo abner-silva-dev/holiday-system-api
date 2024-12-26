@@ -65,12 +65,12 @@ class Server {
     // this.app.use("/", (req, res) => {
     //   res.end("hello");
     // });
-    this.app.use((req, res, next) => {
-      console.log("******** COOKIES **********");
-      console.log(req.headers.cookie);
-      console.log("***************************");
-      next();
-    });
+    // this.app.use((req, res, next) => {
+    //   console.log("******** COOKIES **********");
+    //   console.log(req.headers.cookie);
+    //   console.log("***************************");
+    //   next();
+    // });
 
     this.app.use("/api/v1/department", departmentRoutes);
     this.app.use("/api/v1/holiday", holidayRoutes);
