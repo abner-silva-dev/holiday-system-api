@@ -56,20 +56,20 @@ export const deleteBoss = catchAsync(
 
 export const getAllBoss = getAll<BossDocument>(Boss);
 
-// export const getBoss = getOne<BossDocument>(Boss);
-export const getBoss = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = Boss.findOne({ user: req.params.id });
+export const getBoss = getOne<BossDocument>(Boss);
+// export const getBoss = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const user = Boss.findOne({ user: req.params.id });
 
-    const bossUser = Boss.findById();
+//     const bossUser = Boss.findById();
 
-    if (!doc) {
-      throw new Error("Data don't exist");
-    }
+//     if (!doc) {
+//       throw new Error("Data doesn't exist");
+//     }
 
-    res.status(200).json({
-      status: "success",
-      data: doc,
-    });
-  }
-);
+//     res.status(200).json({
+//       status: "success",
+//       data: doc,
+//     });
+//   }
+// );
