@@ -15,8 +15,6 @@ import AppError from "../utils/appError";
 export const getHoliday = getOne(Holiday);
 export const deleteHoliday = deleteOne(Holiday);
 
-// export const getAllHoliday = getAll(Holiday);
-
 export const getAllHoliday = async (
   req: Request,
   res: Response,
