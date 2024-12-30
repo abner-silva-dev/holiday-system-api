@@ -251,7 +251,7 @@ userSchema.pre("findOneAndUpdate", async function (next) {
 
     const currentPeriod = calculatedPeriod(dateHiring, 0);
 
-    const updatedDate = new Date(currentPeriod.endDate);
+    const updatedDate = new Date(currentPeriod.startDate);
     updatedDate.setMonth(updatedDate.getMonth() + 2);
 
     const expirationPast = updatedDate;
@@ -310,7 +310,7 @@ userSchema.pre("save", async function (next) {
 
   const currentPeriod = calculatedPeriod(this.dateHiring, 0);
 
-  const updatedDate = new Date(currentPeriod.endDate);
+  const updatedDate = new Date(currentPeriod.startDate);
   updatedDate.setMonth(updatedDate.getMonth() + 2);
 
   const expirationPast = updatedDate;

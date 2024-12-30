@@ -138,6 +138,24 @@ const getCredit = (period: string, user: UserDocument) => {
   return credit;
 };
 
+const getStaticCredit = (period: string, user: UserDocument) => {
+  let credit;
+
+  switch (period) {
+    case "future":
+      credit = user?.daysGrantedBySeniorityFuture?.balance || 0;
+      break;
+    case "past":
+      credit = user?.daysGrantedBySeniorityPast?.balance || 0;
+      break;
+    default:
+      credit = user?.daysGrantedBySeniority?.balance || 0;
+      break;
+  }
+
+  return credit;
+};
+
 const addBalanceCredit = async (
   curCredit: number,
   period = "current",
@@ -171,8 +189,16 @@ export const updateHoliday = catchAsync(
       const userBefore = await User.findById(holidayBefore.user);
       if (!userBefore) return next(new AppError("User not found", 404));
       const creditBeforeTemp = getCredit(holidayBefore.period, userBefore);
+      const creditBeforeStatic = getStaticCredit(
+        holidayBefore.period,
+        userBefore
+      );
 
-      if (req.body.days.length > creditBeforeTemp) {
+      if (
+        (req.body.authorizationAdmin === "rejected" ||
+          req.body.authorizationAdmin === "rejected") &&
+        req.body.days.length > creditBeforeStatic
+      ) {
         return next(
           new AppError("No se pueden agregar mas dias credito invalido", 400)
         );

@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAsync";
 import Boss, { BossDocument } from "../models/bossModel";
 import AppError from "../utils/appError";
 import { deleteOne, getAll, getOne } from "./handleFactory";
+import User from "../models/userModel";
 
 // export const createBoss = catchAsync(
 //   async (req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +37,6 @@ import { deleteOne, getAll, getOne } from "./handleFactory";
 export const deleteBoss = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const boss = await Boss.findOne({ user: req.params.id });
-    console.log(boss);
 
     if (!boss) return;
     const data = await Boss.findByIdAndDelete(boss._id);
@@ -52,24 +52,29 @@ export const deleteBoss = catchAsync(
   }
 );
 
+export const getBoss = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const boss = await Boss.findOne({
+      $or: [
+        { _id: req.params.id },
+        { user: req.params.id },
+        { department: req.params.id },
+      ],
+    });
+
+    if (!boss) {
+      return next(new AppError("Jefe no encontrado", 404));
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: boss,
+    });
+  }
+);
+
 // export const deleteBoss = deleteOne<BossDocument>(Boss);
 
 export const getAllBoss = getAll<BossDocument>(Boss);
 
 // export const getBoss = getOne<BossDocument>(Boss);
-export const getBoss = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = Boss.findOne({ user: req.params.id });
-
-    const bossUser = Boss.findById();
-
-    if (!doc) {
-      throw new Error("Data don't exist");
-    }
-
-    res.status(200).json({
-      status: "success",
-      data: doc,
-    });
-  }
-);

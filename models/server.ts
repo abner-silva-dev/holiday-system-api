@@ -12,6 +12,7 @@ import bossRoutes from "../routes/bossRoutes";
 import AppError from "../utils/appError";
 import { globalErrorHandler } from "./../controllers/errorController";
 import Email from "../utils/email";
+import ExpressMongoSanitize from "express-mongo-sanitize";
 
 class Server {
   private app: Application;
@@ -42,13 +43,6 @@ class Server {
       })
     );
 
-    // this.app.use(
-    //   cors({
-    //     origin: "*", // Permite cualquier origen
-    //     credentials: true, // Permite el envío de cookies y credenciales
-    //   })
-    // );
-
     // SERVING STATIC FILES
     this.app.use(express.static("public"));
 
@@ -59,37 +53,18 @@ class Server {
     // COOKIES
     this.app.use(cookieParser());
     // this.app.use(compression());
+
+    // Data sanitization against NoSQL query injection
+    this.app.use(ExpressMongoSanitize());
   }
 
   routes() {
-    // this.app.use("/", (req, res) => {
-    //   res.end("hello");
-    // });
-    // this.app.use((req, res, next) => {
-    //   console.log("******** COOKIES **********");
-    //   console.log(req.headers.cookie);
-    //   console.log("***************************");
-    //   next();
-    // });
-
     this.app.use("/api/v1/department", departmentRoutes);
     this.app.use("/api/v1/holiday", holidayRoutes);
     this.app.use("/api/v1/enterprise", enterpriseRoutes);
     this.app.use("/api/v1/seniority", seniorityRoutes);
     this.app.use("/api/v1/users", usersRoutes);
     this.app.use("/api/v1/boss", bossRoutes);
-
-    this.app.use("/api/v1/email/:email", async (req, res, next) => {
-      const email = req.params.email;
-      const url = `${req.protocol}://${req.get("host")}/`;
-
-      await new Email({ name: "abner", email }, url).send(
-        "<h1>password</h1>",
-        "como estas este es el servidor de DAI"
-      );
-
-      res.end("EMAIL SEND");
-    });
 
     this.app.all("*", (req, _, next) => {
       next(new AppError(`can't find ${req.originalUrl} on this server!`, 404));
